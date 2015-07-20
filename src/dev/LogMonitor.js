@@ -105,15 +105,6 @@ export default class LogMonitor {
               Rollback
             </a>
           }
-          {Object.keys(skippedActions).some(key => skippedActions[key]) &&
-            <span>
-              {' • '}
-              <a onClick={::this.handleSweep}
-                 style={{ textDecoration: 'underline', cursor: 'hand' }}>
-                Sweep
-              </a>
-            </span>
-          }
           {computedStates.length > 1 &&
             <span>
               <span>
