@@ -1,3 +1,9 @@
 .app {
-  background-color: #bbbbff;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.app__content {
+  width: 700px;
+  margin: 1rem auto;
 }

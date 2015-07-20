@@ -22,7 +22,7 @@ class ApiClient {
             }
             request.end((err, res) => {
               if (err) {
-                reject(res.body || err);
+                reject(err);
               } else {
                 resolve(res.body);
               }

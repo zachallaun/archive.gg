@@ -38,6 +38,7 @@ export default class SummonerContainer extends Component {
 
   render() {
     const { region, summonerName } = this.props.params;
+
     return <Summoner { ...getSummoner(this.props.summoners, region, summonerName) } />;
   }
 }

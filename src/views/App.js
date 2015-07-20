@@ -8,8 +8,8 @@ if (__CLIENT__) {
 class App extends Component {
   render() {
     return (
-      <div className="container app">
-        <div className="app-content">
+      <div className="app">
+        <div className="app__content">
           { this.props.children }
         </div>
       </div>

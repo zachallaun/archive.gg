@@ -80,9 +80,11 @@ if (config.port) {
       console.error(err);
     } else {
       api().then(() => {
-
         console.info('==> ✅  Server is listening');
         console.info('==> 🌎  %s running on port %s, API on port %s', config.app.name, config.port, config.apiPort);
+      }, (err) => {
+        console.error('API server failed to load!');
+        console.error(err);
       });
     }
   });
