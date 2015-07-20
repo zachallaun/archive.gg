@@ -12,7 +12,8 @@
     "block-scoped-var": 0,
     // Temporarily disabled for test/* until babel/babel-eslint#33 is resolved
     "padded-blocks": 0,
-    "no-console": 0
+    "no-console": 0,
+    "comma-dangle": [2, "always-multiline"],
   },
   "plugins": [
     "react"

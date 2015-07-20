@@ -1,11 +1,11 @@
 import {
   INFO_LOAD,
   INFO_LOAD_SUCCESS,
-  INFO_LOAD_FAIL
+  INFO_LOAD_FAIL,
 } from '../actions/actionTypes';
 
 const initialState = {
-  loaded: false
+  loaded: false,
 };
 
 export default function info(state = initialState, action = {}) {
@@ -13,21 +13,21 @@ export default function info(state = initialState, action = {}) {
     case INFO_LOAD:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     case INFO_LOAD_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
-        data: action.result
+        data: action.result,
       };
     case INFO_LOAD_FAIL:
       return {
         ...state,
         loading: false,
         loaded: false,
-        error: action.error
+        error: action.error,
       };
     default:
       return state;

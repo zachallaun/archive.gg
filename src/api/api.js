@@ -9,7 +9,7 @@ app.use(session({
   secret: 'abcdefg1234567',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 60000 }
+  cookie: { maxAge: 60000 },
 }));
 app.use(bodyParser.json());
 

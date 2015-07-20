@@ -1,5 +1,6 @@
 {
   "name": "archive.gg",
+  "description": "Archive.gg, a replay.gg archive",
   "author": "Zach Allaun <zach.allaun@gmail.com> (https://github.com/zachallaun)",
   "license": "MIT",
   "version": "0.0.1",
@@ -47,6 +48,7 @@
     "css-loader": "^0.15.1",
     "eslint": "^0.23.0",
     "eslint-config-airbnb": "0.0.6",
+    "eslint-loader": "0.14.2",
     "eslint-plugin-react": "^2.5.2",
     "extract-text-webpack-plugin": "^0.3.1",
     "json-loader": "0.5.2",

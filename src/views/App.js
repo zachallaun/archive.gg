@@ -1,11 +1,8 @@
 /*global __CLIENT__*/
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { isLoaded as isInfoLoaded } from '../reducers/info';
 import { load as loadInfo } from '../actions/infoActions';
-import { createTransitionHook } from '../universalRouter';
 
 if (__CLIENT__) {
   require('./App.scss');
@@ -32,7 +29,7 @@ class App extends Component {
 export default class AppContainer {
   static propTypes = {
     info: PropTypes.object,
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
   }
 
   static fetchData(store) {

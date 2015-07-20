@@ -13,7 +13,7 @@ import ApiClient from './ApiClient';
 import universalRouter from './universalRouter';
 const app = new Express();
 const proxy = httpProxy.createProxyServer({
-  target: 'http://localhost:' + config.apiPort
+  target: 'http://localhost:' + config.apiPort,
 });
 
 app.use(compression());
@@ -80,6 +80,7 @@ if (config.port) {
       console.error(err);
     } else {
       api().then(() => {
+
         console.info('==> ✅  Server is listening');
         console.info('==> 🌎  %s running on port %s, API on port %s', config.app.name, config.port, config.apiPort);
       });

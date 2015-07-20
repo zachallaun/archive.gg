@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { isLoaded as isInfoLoaded } from '../reducers/info';
 import { load as loadInfo } from '../actions/infoActions';
 
 @connect(state => ({
