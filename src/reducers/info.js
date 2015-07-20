@@ -2,7 +2,7 @@ import {
   INFO_LOAD,
   INFO_LOAD_SUCCESS,
   INFO_LOAD_FAIL,
-} from '../actions/actionTypes';
+} from '../constants/actionTypes';
 
 const initialState = {
   loaded: false,
