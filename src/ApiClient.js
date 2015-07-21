@@ -2,7 +2,7 @@
 import superagent from 'superagent';
 import config from 'config';
 
-class ApiClient {
+export default class ApiClient {
   constructor(req) {
     ['get', 'post', 'put', 'patch', 'del'].
       forEach((method) => {
@@ -43,5 +43,3 @@ class ApiClient {
     return '/api' + adjustedPath;
   }
 }
-
-export default ApiClient;

@@ -12,7 +12,7 @@ class Summoner extends Component {
   render() {
     const { summonerName, division } = this.props;
 
-    return <h1>{ summonerName }: { division }</h1>;
+    return <h1>summoner { summonerName }: { division }</h1>;
   }
 }
 
@@ -26,6 +26,7 @@ export default class SummonerContainer extends Component {
       summonerName: PropTypes.string.isRequired,
     }).isRequired,
     summoners: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
   }
 
   static fetchData(store, { region, summonerName }) {
@@ -36,9 +37,18 @@ export default class SummonerContainer extends Component {
     }
   }
 
-  render() {
+  getSummoner() {
     const { region, summonerName } = this.props.params;
+    return getSummoner(this.props.summoners, region, summonerName);
+  }
 
-    return <Summoner { ...getSummoner(this.props.summoners, region, summonerName) } />;
+  render() {
+    const summoner = this.getSummoner();
+
+    if (summoner && !summoner.loading) {
+      return <Summoner { ...summoner } />;
+    } else {
+      return <span>Loading...</span>;
+    }
   }
 }

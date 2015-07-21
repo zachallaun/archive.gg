@@ -5,6 +5,7 @@ const { update } = ReactWithAddons.addons;
 
 import regionNames from 'constants/regions';
 import {
+  SUMMONER_LOAD,
   SUMMONER_LOAD_SUCCESS,
 } from 'constants/actionTypes';
 
@@ -40,6 +41,9 @@ function insertSummoner(state, summoner) {
 
 export default function summoners(state = initialState, action = {}) {
   switch (action.type) {
+    case SUMMONER_LOAD:
+      return insertSummoner(state, { loading: true, ...action.summoner });
+
     case SUMMONER_LOAD_SUCCESS:
       return insertSummoner(state, action.result);
 

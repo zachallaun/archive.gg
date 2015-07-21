@@ -19,16 +19,17 @@ export function createTransitionHook(store) {
         return fetchData(store, nextState.params);
       }))
       .then(() => {
-        callback(); // can't just pass callback to then() because callback assumes first param is error
+        if (callback) callback(); // can't just pass callback to then() because callback assumes first param is error
       }, (error) => {
-        callback(error);
+        if (callback) callback(error);
       });
   };
 }
 
 export default function universalRouter(location, history, store) {
   return new Promise((resolve, reject) => {
-    Router.run(routes, location, [createTransitionHook(store)], (error, initialState) => {
+    const hook = createTransitionHook(store);
+    Router.run(routes, location, [hook], (error, initialState) => {
       if (error) {
         reject(error);
       } else {

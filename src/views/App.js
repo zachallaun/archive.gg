@@ -1,5 +1,7 @@
 /*global __CLIENT__*/
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { TransitionHook } from 'react-router';
+import { createTransitionHook } from 'universalRouter';
 
 if (__CLIENT__) {
   require('./App.scss');
@@ -17,12 +19,30 @@ class App extends Component {
   }
 }
 
-export default class AppContainer {
+const AppContainer = React.createClass({
+  mixins: [
+    TransitionHook,
+  ],
+
+  contextTypes: {
+    store: PropTypes.object,
+  },
+
+  routerWillLeave(...args) {
+    if (!this.transitionHook) {
+      this.transitionHook = createTransitionHook(this.context.store);
+    }
+
+    this.transitionHook(...args);
+  },
+
   render() {
     return (
       <App>
         { this.props.children }
       </App>
     );
-  }
-}
+  },
+});
+
+export default AppContainer;
