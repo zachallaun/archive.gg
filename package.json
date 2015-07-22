@@ -27,6 +27,7 @@
     "file-loader": "^0.8.4",
     "http-proxy": "^1.11.1",
     "jquery": "2.1.4",
+    "lodash": "3.10.0",
     "piping": "0.1.8",
     "react": "0.13.3",
     "react-classset": "0.0.2",
@@ -40,7 +41,8 @@
     "serve-favicon": "^2.3.0",
     "serve-static": "^1.10.0",
     "superagent": "^1.2.0",
-    "url-loader": "^0.5.6"
+    "url-loader": "^0.5.6",
+    "react-zeroclipboard": "2.0.1"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",

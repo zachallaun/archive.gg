@@ -14,7 +14,7 @@
     "padded-blocks": 0,
     "no-console": 0,
     "comma-dangle": [2, "always-multiline"],
-    "no-unused-vars": [2, {"args": "none"}],
+    "no-unused-vars": 0,
     "no-else-return": 0,
   },
   "plugins": [

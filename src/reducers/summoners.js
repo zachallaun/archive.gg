@@ -1,13 +1,17 @@
+import _ from 'lodash';
 import selectn from 'selectn';
 import ReactWithAddons from 'react/addons';
-
-const { update } = ReactWithAddons.addons;
-
 import regionNames from 'constants/regions';
 import {
   SUMMONER_LOAD,
   SUMMONER_LOAD_SUCCESS,
+  SUMMONER_LOAD_FAIL,
+
+  SUMMONER_UPDATE,
+  SUMMONER_UPDATE_FAIL,
 } from 'constants/actionTypes';
+
+const { update } = ReactWithAddons.addons;
 
 function getInitialState() {
   let state = {};
@@ -29,23 +33,42 @@ export function isSummonerLoaded(state, region, summonerName) {
   return !!getSummoner(state, region, summonerName);
 }
 
-function insertSummoner(state, summoner) {
+function undo(current, original, changes) {
+  return _(current).omit(_.keys(changes)).merge(original).value();
+}
+
+function updateSummoner(state, summoner, spec) {
   return update(state, {
     [summoner.region.toUpperCase()]: {
-      [summoner.summonerName.toLowerCase()]: {
-        $set: summoner,
-      },
+      [summoner.summonerName.toLowerCase()]: spec,
     },
   });
+}
+
+function insertSummoner(state, summoner) {
+  return updateSummoner(state, summoner, { $set: summoner });
 }
 
 export default function summoners(state = initialState, action = {}) {
   switch (action.type) {
     case SUMMONER_LOAD:
-      return insertSummoner(state, { loading: true, ...action.summoner });
+      return insertSummoner(state, { ...action.summoner, loading: true });
 
     case SUMMONER_LOAD_SUCCESS:
       return insertSummoner(state, action.result);
+
+    case SUMMONER_LOAD_FAIL:
+      return insertSummoner(state, { ...action.summoner, failed: true });
+
+    case SUMMONER_UPDATE:
+      return updateSummoner(state, action.summoner, {
+        $merge: action.updates,
+      });
+
+    case SUMMONER_UPDATE_FAIL:
+      return updateSummoner(state, action.summoner, {
+        $apply: (s) => undo(s, action.summoner, action.updates),
+      });
 
     default:
       return state;

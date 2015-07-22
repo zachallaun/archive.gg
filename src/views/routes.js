@@ -6,8 +6,7 @@ import Summoner from 'views/Summoner';
 
 export default (
   <Route component={ App }>
-    <Route path="/" component={ SummonerNav }>
-      <Route path=":region/:summonerName" component={ Summoner } />
-    </Route>
+    <Route path="/" component={ SummonerNav } />
+    <Route path="/:region/:summonerName" component={ Summoner } />
   </Route>
 );

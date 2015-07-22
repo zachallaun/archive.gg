@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import ZeroClipboard from 'react-zeroclipboard';
 import classSet from 'react-classset';
+import { REPLAY_GG_URL } from 'constants/misc';
 import {
-  REGISTERED,
   NOT_REGISTERED,
   REGISTRATION_PENDING,
+  REGISTERED,
 } from 'constants/registrationStates';
 
 class Registered extends Component {
@@ -15,70 +17,136 @@ class Registered extends Component {
 class Pending extends Component {
   render() {
     return (
-      <p>Pending</p>
+      <div>
+        <div className="ui hidden section divider"></div>
+        <div className="ui basic segment">
+          <div className="ui active indeterminate text loader">Waiting on games from replay.gg.<br/>Check back later.</div>
+        </div>
+      </div>
+    );
+  }
+}
+
+class CopyableArchiveEmailAddress extends Component {
+  static propTypes = {
+    value: PropTypes.string.isRequired,
+  }
+
+  constructor() {
+    super();
+    this.state = {
+      showPopup: false,
+    };
+  }
+
+  onCopy(e) {
+    const { target } = e;
+
+    this.setState({ showPopup: true });
+    setTimeout(() => {
+      this.setState({ showPopup: false });
+      target.blur();
+    }, 1000);
+  }
+
+  render() {
+    const { value } = this.props;
+
+    const popupClassName = classSet({
+      'ui inverted tiny popup top left': true,
+      'visible': this.state.showPopup,
+    });
+
+    return (
+      <div style={{ position: 'relative' }}>
+        <div className={ popupClassName } style={{ top: -50, left: 5, right: 'initial' }}>
+          Copied!
+        </div>
+        <div className="ui fluid left action input">
+          <ZeroClipboard text={ value }>
+            <button className="ui teal left labeled icon button" onClick={ ::this.onCopy }>
+              <i className="copy icon"></i>
+              Copy
+            </button>
+          </ZeroClipboard>
+          <input value={ value } type="text" readOnly />
+        </div>
+      </div>
     );
   }
 }
 
 class Register extends Component {
+  static propTypes = {
+    summoner: PropTypes.object.isRequired,
+    onRegisterAttempt: PropTypes.func.isRequired,
+  }
+
   render() {
+    const { archiveEmailAddress } = this.props.summoner;
+
     return (
       <div className="content">
+        <h5>How it works</h5>
+
         <p>
-          Archive.gg works in tandem with <a href="http://replay.gg" target="_blank">Replay.gg</a>. To track recorded games, you need to sign up for Replay.gg using the email address provided below. Once that's done, you'll be able to see a list of recorded games with links to the match history and Replay.gg recording.
+          Archive.gg works in tandem with <a href={ REPLAY_GG_URL } target="_blank">Replay.gg</a>. To track recorded games, you need to sign up for Replay.gg using the email address provided below. Once that's done, you'll be able to see a list of recorded games with links to the match history and Replay.gg recording.
         </p>
-        <p>
-          <a href="http://replay.gg" target="_blank">Sign up on replay.gg</a> using the email address below.
-        </p>
-        <input readOnly type="text" className="ui fluid input" value="foo@archive.gg" />
+
+        <div className="ui segment mini grey labels">
+          <div className="ui ribbon label">Step 1</div>
+          <hr style={{ visibility: 'hidden' }} />
+          <CopyableArchiveEmailAddress value={ archiveEmailAddress } />
+
+          <div className="ui divider"></div>
+
+          <div className="ui ribbon label">Step 2</div>
+          <hr style={{ visibility: 'hidden' }} />
+          <a className="ui teal submit button" href={ REPLAY_GG_URL } target="_blank">
+            Sign up on replay.gg
+          </a>
+
+          <div className="ui divider"></div>
+
+          <div className="ui ribbon label">Step 3</div>
+          <hr style={{ visibility: 'hidden' }} />
+          <button className="ui teal submit button" onClick={ this.props.onRegisterAttempt }>
+            Click here after signup
+          </button>
+        </div>
       </div>
     );
   }
 }
 
 class Registration extends Component {
+  static propTypes = {
+    summoner: PropTypes.object.isRequired,
+    updateSummoner: PropTypes.func.isRequired,
+  }
+
+  attemptRegister() {
+    this.props.updateSummoner(this.props.summoner, {
+      registrationState: REGISTRATION_PENDING,
+    });
+  }
+
   render() {
     const { registrationState } = this.props.summoner;
 
-    const registerStepClassName = classSet({
-      'step': true,
-      'active': registrationState === NOT_REGISTERED,
-    });
-
-    const pendingStepClassName = classSet({
-      'step': true,
-      'active': registrationState === REGISTRATION_PENDING,
-      'disabled': registrationState !== REGISTRATION_PENDING,
-    });
-
-    const ContentComponent = {
-      [NOT_REGISTERED]: Register,
-      [REGISTRATION_PENDING]: Pending,
-    }[registrationState];
-
     return (
       <div>
-        <div className="ui fluid small steps">
-          <div className={ registerStepClassName }>
-            <i className="mail outline icon"></i>
-            <div className="content">
-              <div className="title">Register</div>
-              <div className="description">Sign up on replay.gg</div>
-            </div>
-          </div>
-
-          <div className={ pendingStepClassName }>
-            <i className="game icon"></i>
-            <div className="content">
-              <div className="title">Play</div>
-              <div className="description">Play a game and wait for replay.gg to record it</div>
-            </div>
-          </div>
-        </div>
-
         <div className="ui hidden divider"></div>
-
-        <ContentComponent { ...this.props } />
+        {
+          registrationState === NOT_REGISTERED ?
+          <Register
+            summoner={ this.props.summoner }
+            onRegisterAttempt={ ::this.attemptRegister }
+          /> :
+          <Pending
+            summoner={ this.props.summoner }
+          />
+        }
       </div>
     );
   }
@@ -91,6 +159,7 @@ export default class SummonerInfo extends Component {
       division: PropTypes.string.isRequired,
       region: PropTypes.string.isRequired,
       registrationState: PropTypes.string.isRequired,
+      archiveEmailAddress: PropTypes.string.isRequired,
     }).isRequired,
   }
 

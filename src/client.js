@@ -12,7 +12,7 @@ const dest = document.getElementById('content');
 const store = createStore(client, window.__data);
 const location = new Location(document.location.pathname, document.location.search);
 
-let useDevTools = __DEVTOOLS__ && false;
+let useDevTools = __DEVTOOLS__;
 universalRouter(location, history, store)
   .then((component) => {
     if (useDevTools) {

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Router } from 'express';
 import registrationStates from 'constants/registrationStates';
 
@@ -8,6 +9,7 @@ const fakeSummoner = {
   region: 'NA',
   division: 'Silver I',
   registrationState: registrationStates.NOT_REGISTERED,
+  archiveEmailAddress: 'archive+abcdefg12345@archive.gg',
 };
 
 summoners.get('/:region/:summonerName', (req, res) => {
@@ -15,5 +17,12 @@ summoners.get('/:region/:summonerName', (req, res) => {
     res.json(fakeSummoner);
   }, 1000);
 });
+
+summoners.patch('/:region/:summonerName', (req, res) => {
+  setTimeout(() => {
+    _.assign(fakeSummoner, req.body);
+    res.json(fakeSummoner);
+  }, 1000);
+})
 
 export default summoners;
