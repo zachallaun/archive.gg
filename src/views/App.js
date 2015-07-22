@@ -5,14 +5,21 @@ import { createTransitionHook } from 'universalRouter';
 
 if (__CLIENT__) {
   require('!style!css!dist/semantic.css');
-  require('./App.scss');
 }
 
 class App extends Component {
   render() {
     return (
-      <div className="ui container">
-        { this.props.children }
+      <div>
+        <div className="ui center aligned very padded basic teal segment">
+          <div className="ui center aligned huge teal header">
+            archive.gg
+          </div>
+        </div>
+
+        <div className="ui container">
+          { this.props.children }
+        </div>
       </div>
     );
   }

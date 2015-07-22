@@ -11,9 +11,11 @@ const client = new ApiClient();
 const dest = document.getElementById('content');
 const store = createStore(client, window.__data);
 const location = new Location(document.location.pathname, document.location.search);
+
+let useDevTools = __DEVTOOLS__ && false;
 universalRouter(location, history, store)
   .then((component) => {
-    if (__DEVTOOLS__) {
+    if (useDevTools) {
       const { DevTools, DebugPanel } = require('redux-devtools/lib/react');
       const LogMonitor = require('./dev/LogMonitor');
       console.info('You will see a "Warning: React attempted to reuse markup in a container but the checksum was' +
@@ -30,7 +32,6 @@ universalRouter(location, history, store)
   }, (error) => {
     console.error(error);
   });
-
 
 if (process.env.NODE_ENV !== 'production') {
   window.React = React; // enable debugger
