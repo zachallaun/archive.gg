@@ -1,6 +1,6 @@
 /*global __CLIENT__*/
 import React, { Component, PropTypes } from 'react';
-import { TransitionHook } from 'react-router';
+import { Link, TransitionHook } from 'react-router';
 import { createTransitionHook } from 'universalRouter';
 
 if (__CLIENT__) {
@@ -12,9 +12,8 @@ class App extends Component {
     return (
       <div>
         <div className="ui center aligned very padded basic teal segment">
-          <div className="ui center aligned huge teal header">
-            archive.gg
-          </div>
+          <Link className="ui huge teal header" to="/">archive.gg</Link>
+          <div className="sub header">League of Legends replay archive</div>
         </div>
 
         <div className="ui container">

@@ -1,18 +1,26 @@
 import React, { Component, PropTypes } from 'react';
+import SummonerInfo from 'components/SummonerInfo';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { getSummoner, isSummonerLoaded } from 'reducers/summoners';
-import { load as loadSummoner } from 'actions/summonerActions';
+import summonerActions from 'actions/summonerActions';
 
 class Summoner extends Component {
   static propTypes = {
-    summonerName: PropTypes.string.isRequired,
-    division: PropTypes.string.isRequired,
+    summoner: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
   }
 
   render() {
-    const { summonerName, division } = this.props;
-
-    return <h1>summoner { summonerName }: { division }</h1>;
+    return (
+      <div>
+        <SummonerInfo
+          summoner={ this.props.summoner }
+          { ...bindActionCreators(summonerActions, this.props.dispatch) }
+        />
+        <div className="ui hidden section divider"></div>
+      </div>
+    );
   }
 }
 
@@ -31,7 +39,7 @@ export default class SummonerContainer extends Component {
 
   static fetchData(store, { region, summonerName }) {
     if (!isSummonerLoaded(store.getState().summoners, region, summonerName)) {
-      return store.dispatch(loadSummoner(region, summonerName));
+      return store.dispatch(summonerActions.load(region, summonerName));
     } else {
       return [];
     }
@@ -46,9 +54,9 @@ export default class SummonerContainer extends Component {
     const summoner = this.getSummoner();
 
     if (summoner && !summoner.loading) {
-      return <Summoner { ...summoner } />;
+      return <Summoner summoner={ summoner } { ...this.props } />;
     } else {
-      return <span>Loading...</span>;
+      return <div className="ui active centered inline loader"></div>;
     }
   }
 }

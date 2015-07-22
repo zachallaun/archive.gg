@@ -15,7 +15,7 @@ class SummonerNav extends Component {
   constructor({ region, summonerName }) {
     super();
     this.state = {
-      region: region || RegionNames.NA,
+      region: (region && region.toUpperCase()) || RegionNames.NA,
       summonerName: summonerName || '',
     };
   }
@@ -23,7 +23,7 @@ class SummonerNav extends Component {
   navigate(e) {
     e.preventDefault();
     const { region, summonerName } = this.state;
-    this.context.router.transitionTo(`/${region}/${summonerName}`);
+    this.context.router.transitionTo(`/${region.toLowerCase()}/${summonerName}`);
   }
 
   regionChanged(region) {
@@ -41,10 +41,6 @@ class SummonerNav extends Component {
           <div className="column">
             <form className="ui large form" onSubmit={ ::this.navigate }>
               <div className="ui raised segment">
-                <p className="ui centered grey header">
-                  Find your replay.gg archive
-                </p>
-
                 <div className="field">
                   <div className="ui large left labeled icon input">
                     <Dropdown
@@ -66,7 +62,7 @@ class SummonerNav extends Component {
                 </div>
 
                 <button className="ui fluid large teal submit button" onClick={ ::this.navigate }>
-                  Browse replays
+                  Search
                 </button>
               </div>
             </form>
@@ -88,6 +84,18 @@ export default class SummonerNavContainer extends Component {
   render() {
     const { region, summonerName } = this.props.params;
 
-    return <SummonerNav region={ region } summonerName={ summonerName } { ...this.props } />;
+    return (
+      <div>
+        <SummonerNav region={ region } summonerName={ summonerName } />
+        {
+          this.props.children ?
+          <div>
+            <div className="ui section divider" key="divider"></div>
+            { this.props.children }
+          </div> :
+          null
+        }
+      </div>
+    );
   }
 }
