@@ -25,16 +25,35 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.(jpe?g|png|gif|svg)$/, loader: 'file' },
-      { test: /\.js$/, exclude: /node_modules/, loaders: ['react-hot', 'babel?stage=0&optional=runtime&plugins=typecheck', 'eslint-loader']},
-      { test: /\.scss$/, loader: 'style!css!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true' }
+      {
+        test: /\.(jpe?g|png|gif|svg)$/,
+        loader: 'file',
+      },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: "url-loader?limit=10000&minetype=application/font-woff",
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: "file-loader",
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loaders: ['react-hot', 'babel?stage=0&optional=runtime&plugins=typecheck', 'eslint-loader'],
+      },
+      {
+        test: /\.scss$/,
+        loader: 'style!css!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true',
+      },
     ]
   },
   progress: true,
   resolve: {
     modulesDirectories: [
       'src',
-      'node_modules'
+      'node_modules',
+      'semantic',
     ],
     extensions: ['', '.json', '.js']
   },

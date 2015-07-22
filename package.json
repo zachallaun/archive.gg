@@ -34,6 +34,7 @@
     "redux": "1.0.0-rc",
     "redux-devtools": "0.1.1",
     "selectn": "0.9.6",
+    "semantic-ui": "2.0.5",
     "serve-favicon": "^2.3.0",
     "serve-static": "^1.10.0",
     "superagent": "^1.2.0",

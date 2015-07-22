@@ -4,16 +4,15 @@ import { TransitionHook } from 'react-router';
 import { createTransitionHook } from 'universalRouter';
 
 if (__CLIENT__) {
+  require('!style!css!dist/semantic.css');
   require('./App.scss');
 }
 
 class App extends Component {
   render() {
     return (
-      <div className="app">
-        <div className="app__content">
-          { this.props.children }
-        </div>
+      <div className="ui container">
+        { this.props.children }
       </div>
     );
   }

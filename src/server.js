@@ -51,8 +51,6 @@ app.use((req, res) => {
               <meta charSet="utf-8"/>
               <title>archive.gg</title>
               <link rel="shortcut icon" href="/favicon.ico"/>
-              <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.css"
-                    media="screen, projection" rel="stylesheet" type="text/css"/>
               <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
                     media="screen, projection" rel="stylesheet" type="text/css"/>
               {webpackStats.css.map((css, i) => <link href={css} ref={i}
