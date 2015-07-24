@@ -18,10 +18,12 @@
     "dev": "node ./node_modules/concurrently/src/main.js --kill-others \"npm run watch-client\" \"npm run start-dev\""
   },
   "dependencies": {
+    "async": "1.4.0",
     "babel": "5.4.7",
     "babel-plugin-typecheck": "0.0.3",
     "body-parser": "^1.13.2",
     "compression": "^1.5.0",
+    "db-migrate": "0.9.18",
     "express": "^4.13.0",
     "express-session": "^1.11.3",
     "file-loader": "^0.8.4",
@@ -29,6 +31,7 @@
     "jquery": "2.1.4",
     "lodash": "3.10.0",
     "piping": "0.1.8",
+    "pg": "4.4.0",
     "react": "0.13.3",
     "react-classset": "0.0.2",
     "react-inline-css": "1.1.1",
@@ -40,6 +43,7 @@
     "semantic-ui": "2.0.5",
     "serve-favicon": "^2.3.0",
     "serve-static": "^1.10.0",
+    "sql": "0.55.0",
     "superagent": "^1.2.0",
     "url-loader": "^0.5.6",
     "react-zeroclipboard": "2.0.1"
