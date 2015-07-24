@@ -4,33 +4,7 @@ import { Router } from 'express';
 import registrationStates from 'constants/registrationStates';
 import riotApi from 'utils/riotApi';
 import crypto from 'crypto';
-import { query } from 'db/pg';
-import summoners from 'db/summoners';
-
-function findSummoner({ region, summonerName }) {
-  return new Promise((resolve, reject) => {
-    query(
-      summoners.select(summoners.star())
-        .where(summoners.summonerName.equals(summonerName))
-        .and(summoners.region.equals(region))
-        .toQuery()
-    ).then(
-      rows => resolve(rows[0]),
-      err => reject(err)
-    );
-  });
-}
-
-function insertSummoner(summoner) {
-  return new Promise((resolve, reject) => {
-    query(
-      summoners.insert(summoner).toQuery()
-    ).then(
-      () => resolve(),
-      err => reject(err)
-    );
-  });
-}
+import summoners, { findSummoner, insertSummoner } from 'db/summoners';
 
 function emailToken(summonerName) {
   const shasum = crypto.createHash('sha1');
@@ -38,40 +12,43 @@ function emailToken(summonerName) {
   return shasum.digest('hex');
 }
 
-function lookupSummoner(region, summonerName) {
-  return new Promise((resolve, reject) => {
-    findSummoner({ region, summonerName }).then(summoner => {
-      if (summoner) {
-        resolve(summoner);
-      } else {
-        let summoner = {};
+function summonerFields(region, { id, name, profileIconId }) {
+  return {
+    region,
+    summonerName: name,
+    summonerId: id,
+    archiveEmailAddress: `replay+${emailToken(name)}@archive.gg`,
+    profileIconUrl: riotApi.imgUrl('profileicon', `${profileIconId}.png`),
+    registrationState: registrationStates.NOT_REGISTERED,
+  };
+}
 
-        riotApi.summoner.byName(region, summonerName).then(data => {
-          _.assign(summoner, {
-            registrationState: registrationStates.NOT_REGISTERED,
-            archiveEmailAddress: `replay+${emailToken(summonerName)}@archive.gg`,
-            region: region,
-            summonerId: data.id,
-            summonerName: data.name,
-            profileIconUrl: riotApi.imgUrl('profileicon', `${data.profileIconId}.png`),
-          });
-          return riotApi.league.bySummoner(region, summoner.summonerId);
+function fetchSummonerFromApi(region, summonerName) {
+  let summoner = {};
 
-        }).then(entries => {
-          const rankedData = _.findWhere(entries, { queue: 'RANKED_SOLO_5x5' });
-          if (rankedData) {
-            _.assign(summoner, {
-              division: `${_.capitalize(rankedData.tier.toLowerCase())} ${rankedData.entries[0].division}`,
-            });
-          }
-
-          insertSummoner(summoner).then(
-            () => resolve(summoner),
-            err => reject(err)
-          );
-        }).catch(err => reject(err));
+  return riotApi
+    .summoner
+    .byName(region, summonerName)
+    .then(data => {
+      _.assign(summoner, summonerFields(region, data));
+      return riotApi.league.bySummoner(region, summoner.summonerId);
+    })
+    .then(entries => {
+      const rankedData = _.findWhere(entries, { queue: 'RANKED_SOLO_5x5' });
+      if (rankedData) {
+        summoner.division = `${_.capitalize(rankedData.tier.toLowerCase())} ${rankedData.entries[0].division}`;
       }
-    }).catch(err => reject(err));
+      return summoner;
+    });
+}
+
+function lookupSummoner(region, summonerName) {
+  return findSummoner({ region, summonerName }).then(summoner => {
+    if (summoner) {
+      return summoner;
+    } else {
+      return fetchSummonerFromApi(region, summonerName).then(insertSummoner);
+    }
   });
 }
 

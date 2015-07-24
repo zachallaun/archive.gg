@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import Router from 'react-router';
 import routes from 'views/routes';
@@ -16,7 +17,7 @@ export function createTransitionHook(store) {
       })
       .map(getFetchData)
       .map(fetchData => {
-        return fetchData(store, nextState.params);
+        return fetchData(store, _.mapValues(nextState.params, decodeURI));
       }))
       .then(() => {
         if (callback) callback(); // can't just pass callback to then() because callback assumes first param is error

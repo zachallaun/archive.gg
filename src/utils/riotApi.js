@@ -94,13 +94,17 @@ function match(region, id) {
 
 /* --- Summoner API --- */
 
+export function standardizedSummonerName(name) {
+  return name.toLowerCase().replace(/ /g, '');
+}
+
 function summoner(region, id) {
   const url = apiUrl(region, `summoner/${id}`);
   return get(url, { extract: id });
 }
 summoner.byName = function (region, name) {
   const url = apiUrl(region, `summoner/by-name/${name}`);
-  return get(url, { extract: name });
+  return get(url, { extract: standardizedSummonerName(name) });
 }
 
 /* --- Data Dragon (static assets) --- */

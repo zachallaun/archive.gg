@@ -52,16 +52,15 @@ export default class SummonerContainer extends Component {
 
   render() {
     const summoner = this.getSummoner();
-    const { summonerName } = summoner;
 
     if (summoner && summoner.failed) {
       return (
         <div className="ui negative message">
           <div className="header">Something's wrong. Sorry!</div>
-          <p>We were unable to load { summonerName }'s data.</p>
+          <p>We were unable to load { summoner.summonerName }'s data.</p>
         </div>
       );
-    } else if (summoner && summoner.loading) {
+    } else if (!summoner || summoner.loading) {
       return <div className="ui active centered inline loader"></div>;
     } else {
       return <Summoner summoner={ summoner } { ...this.props } />;
