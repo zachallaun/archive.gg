@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import selectn from 'selectn';
 import ReactWithAddons from 'react/addons';
-import regionNames from 'constants/regions';
+import regionNames from 'constants/riot/regions';
 import {
   SUMMONER_LOAD,
   SUMMONER_LOAD_SUCCESS,

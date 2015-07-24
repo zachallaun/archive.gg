@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Dropdown from 'components/Dropdown';
-import RegionNames from 'constants/regions';
+import RegionNames from 'constants/riot/regions';
 
 class SummonerNav extends Component {
   static propTypes = {
