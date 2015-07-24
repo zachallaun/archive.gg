@@ -164,24 +164,25 @@ export default class SummonerInfo extends Component {
       region: PropTypes.string.isRequired,
       registrationState: PropTypes.string.isRequired,
       archiveEmailAddress: PropTypes.string.isRequired,
+      profileIconUrl: PropTypes.string.isRequired,
     }).isRequired,
   }
 
   renderSummonerSummary() {
-    const { summonerName, region, division } = this.props.summoner;
+    const { summonerName, region, division, profileIconUrl } = this.props.summoner;
 
     return (
       <div className="ui two column centered grid">
         <div className="column">
           <div className="ui items">
             <div className="item">
-              <div className="ui image">
-                <i className="huge user icon"></i>
+              <div className="ui tiny image">
+                <img src={ profileIconUrl } />
               </div>
               <div className="middle aligned content">
                 <span className="header">{ summonerName }</span>
                 <div className="meta">
-                  <span>{ region }</span> / <span>{ division }</span>
+                  <span>{ region.toUpperCase() }</span> / <span>{ division }</span>
                 </div>
               </div>
             </div>
