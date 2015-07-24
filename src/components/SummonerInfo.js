@@ -14,19 +14,6 @@ class Registered extends Component {
   }
 }
 
-class Pending extends Component {
-  render() {
-    return (
-      <div>
-        <div className="ui hidden section divider"></div>
-        <div className="ui basic segment">
-          <div className="ui active indeterminate text loader">Waiting on games from replay.gg.<br/>Check back later.</div>
-        </div>
-      </div>
-    );
-  }
-}
-
 class CopyableArchiveEmailAddress extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
@@ -82,6 +69,22 @@ class Register extends Component {
     onRegisterAttempt: PropTypes.func.isRequired,
   }
 
+  constructor({ summoner }) {
+    super();
+    this.state = {
+      showWaiting: summoner.registrationState === REGISTRATION_PENDING,
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentState = this.props.summoner.registrationState;
+    const nextState = nextProps.summoner.registrationState;
+
+    if (currentState === NOT_REGISTERED && nextState === REGISTRATION_PENDING) {
+      this.setState({ showWaiting: true });
+    }
+  }
+
   render() {
     const { archiveEmailAddress } = this.props.summoner;
 
@@ -90,8 +93,10 @@ class Register extends Component {
         <h5>How it works</h5>
 
         <p>
-          Archive.gg works in tandem with <a href={ REPLAY_GG_URL } target="_blank">Replay.gg</a>. To track recorded games, you need to sign up for Replay.gg using the email address provided below. Once that's done, you'll be able to see a list of recorded games with links to the match history and Replay.gg recording.
+          Archive.gg works in tandem with <a href={ REPLAY_GG_URL } target="_blank">Replay.gg</a>. To track recorded games, you need to sign up for Replay.gg using the email address provided below. Once that's done, we'll begin collecting information from replay.gg after a match. You can then check back here to see a list of your recorded games.
         </p>
+
+        <h5>Get started</h5>
 
         <div className="ui segment mini grey labels">
           <div className="ui ribbon label">Step 1</div>
@@ -110,9 +115,16 @@ class Register extends Component {
 
           <div className="ui ribbon label">Step 3</div>
           <hr style={{ visibility: 'hidden' }} />
-          <button className="ui teal submit button" onClick={ this.props.onRegisterAttempt }>
-            Click here after signup
-          </button>
+          {
+            this.state.showWaiting ?
+            <div className="ui disabled button">
+              <i className="ui active small inline indeterminate loader"></i>
+              <span style={{ marginLeft: '1em' }}>Waiting on games from replay.gg – go play some LoL!</span>
+            </div> :
+            <button className="ui teal submit button" onClick={ this.props.onRegisterAttempt }>
+              Click here after signup
+            </button>
+          }
         </div>
       </div>
     );
@@ -132,21 +144,13 @@ class Registration extends Component {
   }
 
   render() {
-    const { registrationState } = this.props.summoner;
-
     return (
       <div>
         <div className="ui hidden divider"></div>
-        {
-          registrationState === NOT_REGISTERED ?
-          <Register
-            summoner={ this.props.summoner }
-            onRegisterAttempt={ ::this.attemptRegister }
-          /> :
-          <Pending
-            summoner={ this.props.summoner }
-          />
-        }
+        <Register
+          summoner={ this.props.summoner }
+          onRegisterAttempt={ ::this.attemptRegister }
+        />
       </div>
     );
   }

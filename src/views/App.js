@@ -1,7 +1,7 @@
 /*global __CLIENT__*/
 import React, { Component, PropTypes } from 'react';
 import { Link, TransitionHook } from 'react-router';
-import { createTransitionHook } from 'universalRouter';
+import { createTransitionHook } from 'utils/universalRouter';
 
 if (__CLIENT__) {
   require('!style!css!dist/semantic.css');

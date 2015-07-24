@@ -9,7 +9,7 @@ const fakeSummoner = {
   region: 'NA',
   division: 'Silver I',
   registrationState: registrationStates.NOT_REGISTERED,
-  archiveEmailAddress: 'archive+abcdefg12345@archive.gg',
+  archiveEmailAddress: 'replay+abcdefg12345@archive.gg',
 };
 
 summoners.get('/:region/:summonerName', (req, res) => {

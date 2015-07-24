@@ -12,6 +12,8 @@ global.__DEVELOPMENT__ = process.env.NODE_ENV !== 'production';
 delete global.__BROWSER__;
 
 if (__DEVELOPMENT__) {
+  require('dotenv').load();
+
   if (!require('piping')({
       hook: true,
       ignore: /(\/\.|~$|\.json|\.scss$)/i

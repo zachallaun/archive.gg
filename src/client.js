@@ -2,9 +2,9 @@
 import React from 'react';
 import BrowserHistory from 'react-router/lib/BrowserHistory';
 import Location from 'react-router/lib/Location';
-import createStore from './redux/create';
-import ApiClient from './ApiClient';
-import universalRouter from './universalRouter';
+import createStore from 'redux/create';
+import ApiClient from 'ApiClient';
+import universalRouter from 'utils/universalRouter';
 const history = new BrowserHistory();
 const client = new ApiClient();
 

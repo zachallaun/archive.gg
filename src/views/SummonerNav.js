@@ -56,6 +56,7 @@ class SummonerNav extends Component {
                       value={ this.state.summonerName }
                       onChange={ ::this.summonerNameChanged }
                       placeholder="Summoner name..."
+                      autoFocus
                     />
                     <i className="circular teal search icon"></i>
                   </div>
