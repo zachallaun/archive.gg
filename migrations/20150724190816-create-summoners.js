@@ -5,8 +5,7 @@ var async = require('async');
 exports.up = function(db, callback) {
   async.series([
     db.createTable.bind(db, 'summoners', {
-      id: { type: type.INTEGER, primaryKey: true, autoIncrement: true },
-      summonerId: { type: type.INTEGER, notNull: true, unique: true },
+      id: { type: type.INTEGER, primaryKey: true, notNull: true, unique: true },
       summonerName: { type: type.STRING, notNull: true },
       region: type.STRING,
       registrationState: type.STRING,

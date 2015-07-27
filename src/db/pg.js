@@ -2,7 +2,7 @@ import pg from 'pg';
 
 const DATABASE_URL = process.env.DATABASE_URL;
 if (!DATABASE_URL) {
-  throw 'process.env.DATABASE_URL must be set';
+  console.error('process.env.DATABASE_URL must be set');
 }
 
 export function query({ text, values }) {
@@ -17,14 +17,18 @@ export function query({ text, values }) {
         return reject(err);
       }
 
-      client.query(text, values, (err, { rows } = {}) => {
+      const start = Date.now();
+
+      client.query(text, values, (err, response) => {
         if (err) {
-          console.error('ERROR during query', err);
-          console.error(sql);
+          console.error('DB ERROR during query', err);
+          console.error(text, values);
           return reject(err);
+        } else {
+          console.info(`DB (${Date.now() - start}ms): ${text} ${values}`);
         }
 
-        resolve(rows);
+        resolve(response.rows);
       });
     });
   });

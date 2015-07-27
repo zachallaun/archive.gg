@@ -6,6 +6,8 @@ import riotApi from 'utils/riotApi';
 import crypto from 'crypto';
 import summoners, { findSummoner, insertSummoner } from 'db/summoners';
 
+/* --- DB/API Helpers --- */
+
 function emailToken(summonerName) {
   const shasum = crypto.createHash('sha1');
   shasum.update(summonerName);
@@ -14,9 +16,9 @@ function emailToken(summonerName) {
 
 function summonerFields(region, { id, name, profileIconId }) {
   return {
+    id,
     region,
     summonerName: name,
-    summonerId: id,
     archiveEmailAddress: `replay+${emailToken(name)}@archive.gg`,
     profileIconUrl: riotApi.imgUrl('profileicon', `${profileIconId}.png`),
     registrationState: registrationStates.NOT_REGISTERED,
@@ -31,7 +33,7 @@ function fetchSummonerFromApi(region, summonerName) {
     .byName(region, summonerName)
     .then(data => {
       _.assign(summoner, summonerFields(region, data));
-      return riotApi.league.bySummoner(region, summoner.summonerId);
+      return riotApi.league.bySummoner(region, summoner.id);
     })
     .then(entries => {
       const rankedData = _.findWhere(entries, { queue: 'RANKED_SOLO_5x5' });
@@ -42,7 +44,7 @@ function fetchSummonerFromApi(region, summonerName) {
     });
 }
 
-function lookupSummoner(region, summonerName) {
+function fetchSummoner(region, summonerName) {
   return findSummoner({ region, summonerName }).then(summoner => {
     if (summoner) {
       return summoner;
@@ -52,11 +54,13 @@ function lookupSummoner(region, summonerName) {
   });
 }
 
+/* --- Routes --- */
+
 const routes = Router();
 
 routes.get('/:region/:summonerName', (req, res) => {
   const { region, summonerName } = req.params;
-  lookupSummoner(region, summonerName).then(summoner => {
+  fetchSummoner(region, summonerName).then(summoner => {
     res.json(summoner);
   }).catch(error => {
     console.log('ERROR:', error);

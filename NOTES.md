@@ -34,3 +34,13 @@ form field as errored and report it to user.
 Should then show the summoner's name, region, division/tier, and then
 either registration status if they're not registered/confirmed, or
 match list.
+
+# What happens when an email from replay.gg comes in?
+
+- Verify the email origin (e.g. Mailgun)
+- Figure out which summoner the email is for based on the archiveEmail
+- Parse the raw email using `parseReplaygg`, discard if invalid
+- Look up match data using Riot's API and the matchId
+- Confirm that summoner was a part of match, discard if not
+- Confirm that we don't have this match in the DB already
+- Save match info to DB, using replay.gg data and API data

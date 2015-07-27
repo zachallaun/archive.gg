@@ -6,7 +6,7 @@ import regions from 'constants/riot/regions';
 
 const API_KEY = process.env.RIOT_GAMES_API_KEY;
 if (!API_KEY) {
-  throw 'process.env.RIOT_GAMES_API_KEY must be set';
+  console.error('process.env.RIOT_GAMES_API_KEY must be set');
 }
 
 function validateRegion(region) {
@@ -45,9 +45,9 @@ function staticDataApiUrl(region, resourcePath) {
   return 'https://' + path.join(base, staticDataVersion, resourcePath);
 }
 
-function get(url, { extract, query = {} }) {
+function get(url, { extract, query = {} } = {}) {
   if (__DEVELOPMENT__) {
-    console.log(`Riot API GET: ${url}`);
+    console.info(`Riot API GET: ${url}`);
   }
 
   return new Promise((resolve, reject) => {
