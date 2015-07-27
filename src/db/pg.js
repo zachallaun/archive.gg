@@ -20,6 +20,8 @@ export function query({ text, values }) {
       const start = Date.now();
 
       client.query(text, values, (err, response) => {
+        done();
+
         if (err) {
           console.error('DB ERROR during query', err);
           console.error(text, values);
