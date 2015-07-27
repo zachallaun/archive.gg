@@ -15,7 +15,8 @@
     "lint": "node ./node_modules/eslint/bin/eslint.js -c .eslintrc src",
     "start-dev": "NODE_PATH=\"./src\" NODE_ENV=\"development\" node ./babel.server",
     "watch-client": "UV_THREADPOOL_SIZE=100 NODE_PATH=\"./src\" node webpack/webpack-dev-server.js",
-    "dev": "node ./node_modules/concurrently/src/main.js --kill-others \"npm run watch-client\" \"npm run start-dev\""
+    "dev": "node ./node_modules/concurrently/src/main.js --kill-others \"npm run watch-client\" \"npm run start-dev\"",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "async": "1.4.0",
@@ -25,7 +26,6 @@
     "compression": "^1.5.0",
     "db-migrate": "0.9.18",
     "express": "^4.13.0",
-    "express-session": "^1.11.3",
     "file-loader": "^0.8.4",
     "http-proxy": "^1.11.1",
     "jquery": "2.1.4",
