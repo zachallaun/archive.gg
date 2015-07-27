@@ -27,6 +27,7 @@ export function findMatches({ summonerId }) {
     matches
       .select(matches.star())
       .where(matches.summonerId.equals(summonerId))
+      .order(matches.matchCreation.descending)
       .toQuery()
   );
 }
