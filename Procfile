@@ -1,1 +1,1 @@
-web: NODE_PATH="./src" NODE_ENV="production" node ./babel.server.js
+web: NODE_PATH="./src" node ./babel.server.js
