@@ -38,8 +38,10 @@ export default class SummonerContainer extends Component {
   }
 
   static fetchData(store, { region, summonerName }) {
+    const promise = store.dispatch(summonerActions.load(region, summonerName));
+
     if (!isSummonerLoaded(store.getState().summoners, region, summonerName)) {
-      return store.dispatch(summonerActions.load(region, summonerName));
+      return promise;
     } else {
       return [];
     }

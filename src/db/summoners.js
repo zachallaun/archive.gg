@@ -16,23 +16,28 @@ const summoners = sql.define({
   ],
 });
 
+function caseInsensitiveEquals(attr, value) {
+  return sql.functions.LOWER(attr).equals(value.toLowerCase());
+}
+
 // Accepts archiveEmailAddress OR region and summonerName
-export function findSummoner({ region, summonerName, archiveEmailAddress }) {
+export function findSummoner({ id, region, summonerName, archiveEmailAddress }) {
   let q = summoners.select(summoners.star());
 
+  if (id) {
+    q = q.where(summoners.id).equals(id);
+  }
+
+  if (region) {
+    q = q.where(caseInsensitiveEquals(summoners.region, region));
+  }
+
+  if (summonerName) {
+    q = q.where(caseInsensitiveEquals(summoners.summonerName, summonerName));
+  }
+
   if (archiveEmailAddress) {
-    q = q.where(
-      summoners.archiveEmailAddress
-      .equals(archiveEmailAddress)
-    );
-  } else {
-    q = q.where(
-      sql.functions.LOWER(summoners.summonerName)
-      .equals(summonerName.toLowerCase())
-    ).and(
-      sql.functions.LOWER(summoners.region)
-      .equals(region.toLowerCase())
-    );
+    q = q.where(summoners.archiveEmailAddress.equals(archiveEmailAddress))
   }
 
   return query(q.toQuery()).then(rows => rows[0]);
@@ -40,6 +45,10 @@ export function findSummoner({ region, summonerName, archiveEmailAddress }) {
 
 export function insertSummoner(summoner) {
   return query(summoners.insert(summoner).toQuery()).then(() => summoner);
+}
+
+export function updateSummoner(id, updates) {
+  return query(summoners.update(updates).where(summoners.id.equals(id)).toQuery());
 }
 
 export default summoners;

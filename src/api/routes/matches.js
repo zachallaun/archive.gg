@@ -3,8 +3,9 @@ import { Router } from 'express';
 import parseReplaygg from 'utils/parseReplaygg';
 import riotApi from 'utils/riotApi';
 import validMailgunOrigin from 'utils/validMailgunOrigin';
-import summoners, { findSummoner } from 'db/summoners';
+import summoners, { findSummoner, updateSummoner } from 'db/summoners';
 import matches, { findMatch, insertMatch } from 'db/matches';
+import registrationStates from 'constants/registrationStates';
 
 /* --- DB/API Helpers --- */
 
@@ -118,6 +119,11 @@ routes.post('/by-email', (req, res) => {
       return fetchMatchFromApi(summoner, matchInfo);
     })
     .then(insertMatch)
+    .then(match => {
+      return updateSummoner(match.summonerId, {
+        registrationState: registrationStates.REGISTERED,
+      });
+    })
     .then(() => {
       res.status(200).end();
     })
