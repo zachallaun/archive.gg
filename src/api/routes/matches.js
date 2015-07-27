@@ -27,10 +27,11 @@ function ensureMatchNotInDB(summoner, { matchId }) {
   });
 }
 
-function matchFields(summoner, apiData, matchInfo) {
+function matchFields({ region, id: summonerId }, apiData, matchInfo) {
   const {
     matchId,
     matchDuration,
+    matchCreation,
     queueType,
     participants,
     participantIdentities
@@ -42,11 +43,14 @@ function matchFields(summoner, apiData, matchInfo) {
   }, {});
 
   const summonerInfo = _.find(participants, participant => {
-    return summonersByParticipantId[participant.participantId].summonerId === summoner.id;
+    return summonersByParticipantId[participant.participantId].summonerId === summonerId;
   });
 
   if (!summonerInfo) {
-    throw `Summoner ${summoner.id} did not take part in match ${matchId}:\n${participants.map(p => p.participantId)}`;
+    const summonerIds = _.values(summonersByParticipantId).map(p => {
+      return p.summonerId;
+    });
+    throw `Summoner ${summonerId} did not take part in match ${matchId}. IDs: ${summonerIds}`;
   }
 
   const {
@@ -65,20 +69,26 @@ function matchFields(summoner, apiData, matchInfo) {
     replayUnsubscribeUrl,
   } = matchInfo;
 
-  return {
-    matchId,
-    matchDuration,
-    queueType,
-    championId,
-    kills,
-    deaths,
-    assists,
-    winner,
-    summonerId: summoner.id,
-    matchHistoryUrl,
-    replayUrl,
-    replayUnsubscribeUrl,
-  };
+  return riotApi
+    .champion(region, championId)
+    .then(({ key }) => {
+      return {
+        matchId,
+        matchDuration,
+        matchCreation,
+        queueType,
+        championId,
+        championKey: key,
+        kills,
+        deaths,
+        assists,
+        winner,
+        summonerId,
+        matchHistoryUrl,
+        replayUrl,
+        replayUnsubscribeUrl,
+      };
+    })
 }
 
 function fetchMatchFromApi(summoner, matchInfo) {
@@ -87,8 +97,8 @@ function fetchMatchFromApi(summoner, matchInfo) {
 
   return riotApi
     .match(region, matchId)
-    .then(apiData => {
-      return matchFields(summoner, apiData, matchInfo);
+    .then(matchApiData => {
+      return matchFields(summoner, matchApiData, matchInfo);
     });
 }
 

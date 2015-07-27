@@ -5,11 +5,13 @@ var async = require('async');
 exports.up = function(db, callback) {
   async.series([
     db.createTable.bind(db, 'matches', {
-      id:                   { type: type.INTEGER, primaryKey: true, autoIncrement: true },
-      summonerId:           { type: type.INTEGER, notNull: true },
-      matchId:              { type: type.INTEGER, notNull: true },
+      id:                   { type: type.BIG_INTEGER, primaryKey: true, autoIncrement: true },
+      summonerId:           { type: type.BIG_INTEGER, notNull: true },
+      matchId:              { type: type.BIG_INTEGER, notNull: true },
       championId:           { type: type.INTEGER, notNull: true },
-      matchDuration:        { type: type.INTEGER, notNull: true },
+      championKey:          { type: type.STRING, notNull: true },
+      matchDuration:        { type: type.BIG_INTEGER, notNull: true },
+      matchCreation:        { type: type.BIG_INTEGER, notNull: true },
       queueType:            { type: type.STRING, notNull: true },
       kills:                { type: type.INTEGER, notNull: true },
       deaths:               { type: type.INTEGER, notNull: true },

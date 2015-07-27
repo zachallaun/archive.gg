@@ -1,11 +1,12 @@
 /* global __DEVELOPMENT__ */
+/* global __CLIENT__ */
 import request from 'superagent';
 import path from 'path';
 import resourceVersions from 'constants/riot/resourceVersions';
 import regions from 'constants/riot/regions';
 
 const API_KEY = process.env.RIOT_GAMES_API_KEY;
-if (!API_KEY) {
+if (!API_KEY && !__CLIENT__) {
   console.error('process.env.RIOT_GAMES_API_KEY must be set');
 }
 
@@ -71,18 +72,18 @@ function champion(region, id, query) {
   const url = staticDataApiUrl(region, `champion/${id}`);
   return get(url, query);
 }
-champion.all = function (query) {
+champion.all = function all(region, query) {
   const url = staticDataApiUrl(region, 'champion');
   return get(url, query);
-}
+};
 
 /* --- League API --- */
 
 const league = {
-  bySummoner: function (region, id) {
+  bySummoner: function bySummoner(region, id) {
     const url = apiUrl(region, `league/by-summoner/${id}/entry`);
     return get(url, { extract: id });
-  }
+  },
 };
 
 /* --- Match API --- */
@@ -102,15 +103,15 @@ function summoner(region, id) {
   const url = apiUrl(region, `summoner/${id}`);
   return get(url, { extract: id });
 }
-summoner.byName = function (region, name) {
+summoner.byName = function byName(region, name) {
   const url = apiUrl(region, `summoner/by-name/${name}`);
   return get(url, { extract: standardizedSummonerName(name) });
-}
+};
 
 /* --- Data Dragon (static assets) --- */
 
-function imgUrl(group, imgName) {
-  return `http://ddragon.leagueoflegends.com/cdn/${resourceVersions['cdn']}/img/${group}/${imgName}`;
+function imgUrl(group, imgId) {
+  return `http://ddragon.leagueoflegends.com/cdn/${resourceVersions.cdn}/img/${group}/${imgId}.png`;
 }
 
 /* --- Exports --- */

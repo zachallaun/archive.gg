@@ -40,7 +40,14 @@ export function findSummoner({ id, region, summonerName, archiveEmailAddress }) 
     q = q.where(summoners.archiveEmailAddress.equals(archiveEmailAddress))
   }
 
-  return query(q.toQuery()).then(rows => rows[0]);
+  return query(q.toQuery()).then(rows => {
+    if (rows[0]) {
+      return {
+        ...rows[0],
+        id: parseInt(rows[0].id, 10),
+      };
+    }
+  });
 }
 
 export function insertSummoner(summoner) {

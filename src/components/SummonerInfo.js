@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import MatchList from 'components/MatchList';
 import ZeroClipboard from 'react-zeroclipboard';
 import classSet from 'react-classset';
 import { REPLAY_GG_URL } from 'constants/misc';
@@ -7,12 +8,6 @@ import {
   REGISTRATION_PENDING,
   REGISTERED,
 } from 'constants/registrationStates';
-
-class Registered extends Component {
-  render() {
-    return <h1>registered</h1>;
-  }
-}
 
 class CopyableArchiveEmailAddress extends Component {
   static propTypes = {
@@ -194,7 +189,7 @@ export default class SummonerInfo extends Component {
 
   render() {
     const RegistrationStateComponent = {
-      [REGISTERED]: Registered,
+      [REGISTERED]: MatchList,
       [NOT_REGISTERED]: Registration,
       [REGISTRATION_PENDING]: Registration,
     }[this.props.summoner.registrationState];

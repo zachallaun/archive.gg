@@ -5,6 +5,7 @@ import registrationStates from 'constants/registrationStates';
 import riotApi from 'utils/riotApi';
 import crypto from 'crypto';
 import summoners, { findSummoner, insertSummoner } from 'db/summoners';
+import matches, { findMatches } from 'db/matches';
 
 /* --- DB/API Helpers --- */
 
@@ -20,7 +21,7 @@ function summonerFields(region, { id, name, profileIconId }) {
     region,
     summonerName: name,
     archiveEmailAddress: `replay+${emailToken(name)}@archive.gg`,
-    profileIconUrl: riotApi.imgUrl('profileicon', `${profileIconId}.png`),
+    profileIconUrl: riotApi.imgUrl('profileicon', profileIconId),
     registrationState: registrationStates.NOT_REGISTERED,
   };
 }
@@ -44,6 +45,15 @@ function fetchSummonerFromApi(region, summonerName) {
     });
 }
 
+function fetchMatches(summoner) {
+  return findMatches({ summonerId: summoner.id }).then(matches => {
+    return {
+      ...summoner,
+      matches,
+    };
+  });
+}
+
 function fetchSummoner(region, summonerName) {
   return findSummoner({ region, summonerName }).then(summoner => {
     if (summoner) {
@@ -51,7 +61,7 @@ function fetchSummoner(region, summonerName) {
     } else {
       return fetchSummonerFromApi(region, summonerName).then(insertSummoner);
     }
-  });
+  }).then(fetchMatches);
 }
 
 /* --- Routes --- */

@@ -8,7 +8,9 @@ const matches = sql.define({
     'matchId',
     'summonerId',
     'championId',
+    'championKey',
     'matchDuration',
+    'matchCreation',
     'queueType',
     'kills',
     'deaths',
@@ -19,6 +21,15 @@ const matches = sql.define({
     'replayUnsubscribeUrl',
   ],
 });
+
+export function findMatches({ summonerId }) {
+  return query(
+    matches
+      .select(matches.star())
+      .where(matches.summonerId.equals(summonerId))
+      .toQuery()
+  );
+}
 
 export function findMatch({ summonerId, matchId }) {
   return query(
