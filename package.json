@@ -26,6 +26,7 @@
     "compression": "^1.5.0",
     "db-migrate": "0.9.18",
     "express": "^4.13.0",
+    "extract-text-webpack-plugin": "^0.3.1",
     "file-loader": "^0.8.4",
     "http-proxy": "^1.11.1",
     "jquery": "2.1.4",
@@ -47,7 +48,8 @@
     "sql": "0.55.0",
     "superagent": "^1.2.0",
     "url-loader": "^0.5.6",
-    "react-zeroclipboard": "2.0.1"
+    "react-zeroclipboard": "2.0.1",
+    "webpack": "^1.9.11"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
@@ -62,7 +64,6 @@
     "eslint-config-airbnb": "0.0.6",
     "eslint-loader": "0.14.2",
     "eslint-plugin-react": "^2.5.2",
-    "extract-text-webpack-plugin": "^0.3.1",
     "json-loader": "0.5.2",
     "node-sass": "^3.2.0",
     "react-a11y": "0.1.1",
@@ -70,7 +71,6 @@
     "sass-loader": "^1.0.2",
     "strip-loader": "^0.1.0",
     "style-loader": "^0.12.3",
-    "webpack": "^1.9.11",
     "webpack-dev-server": "1.9.0"
   },
   "engines": {
