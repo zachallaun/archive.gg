@@ -10,7 +10,7 @@
   },
   "main": "babel.server.js",
   "scripts": {
-    "start": "NODE_PATH=\"./src\" NODE_ENV=\"production\" PORT=\"8080\" node ./babel.server",
+    "start": "NODE_PATH=\"./src\" NODE_ENV=\"production\" node ./babel.server",
     "build": "node ./node_modules/webpack/bin/webpack.js --verbose --colors --display-error-details --config webpack/prod.config.js",
     "lint": "node ./node_modules/eslint/bin/eslint.js -c .eslintrc src",
     "start-dev": "NODE_PATH=\"./src\" NODE_ENV=\"development\" node ./babel.server",
