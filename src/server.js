@@ -46,29 +46,38 @@ app.use((req, res) => {
     .then((component) => {
       try {
         res.send('<!doctype html>\n' + React.renderToString(
-            <html lang="en-us">
+          <html lang="en-us">
             <head>
               <meta charSet="utf-8"/>
               <title>archive.gg</title>
               <link rel="shortcut icon" href="/favicon.ico"/>
-              <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
-                    media="screen, projection" rel="stylesheet" type="text/css"/>
-              {webpackStats.css.map((css, i) => <link href={css} ref={i}
-                                                      media="screen, projection" rel="stylesheet" type="text/css"/>)}
+              <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+              {
+                webpackStats.css.map((css, i) => {
+                  return <link
+                    href={ css }
+                    ref={ i }
+                    media="screen, projection"
+                    rel="stylesheet"
+                    type="text/css"
+                  />;
+                })
+              }
             </head>
             <body>
-            <div id="content" dangerouslySetInnerHTML={{__html: React.renderToString(component)}}/>
-            <script dangerouslySetInnerHTML={{__html: `window.__data=${JSON.stringify(store.getState())};`}}/>
-            <script src={webpackStats.script[0]}/>
+              <div id="content" dangerouslySetInnerHTML={{ __html: React.renderToString(component) }}/>
+              <script dangerouslySetInnerHTML={{ __html: `window.__data=${JSON.stringify(store.getState())};` }}/>
+              <script src={ webpackStats.script[0] }/>
             </body>
-            </html>));
+          </html>
+        ));
       } catch (error) {
         console.error('ERROR', error);
-        res.status(500).send({error: error});
+        res.status(500).send({ error });
       }
     }, (error) => {
       console.error('ERROR', error);
-      res.status(500).send({error: error});
+      res.status(500).send({ error });
     });
 });
 
@@ -78,8 +87,8 @@ if (config.port) {
       console.error(err);
     } else {
       api().then(() => {
-        console.info('==> ✅  Server is listening');
-        console.info('==> 🌎  %s running on port %s, API on port %s', config.app.name, config.port, config.apiPort);
+        console.info('==> Server is listening');
+        console.info('==> %s running on port %s, API on port %s', config.app.name, config.port, config.apiPort);
       }, (err) => {
         console.error('API server failed to load!');
         console.error(err);
@@ -87,5 +96,5 @@ if (config.port) {
     }
   });
 } else {
-  console.error('==>     ERROR: No PORT environment variable has been specified');
+  console.error('==> ERROR: No PORT environment variable has been specified');
 }

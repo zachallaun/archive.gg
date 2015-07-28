@@ -12,7 +12,9 @@ class App extends Component {
     return (
       <div>
         <div className="ui center aligned very padded basic teal segment">
-          <Link className="ui huge teal header" to="/">archive.gg</Link>
+          <Link className="ui huge teal header" to="/">
+            archive.gg<sup style={{ top: '-.75em', fontSize: '50%' }}>beta</sup>
+          </Link>
           <div className="sub header">League of Legends replay archive</div>
         </div>
 
