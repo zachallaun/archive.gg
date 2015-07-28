@@ -93,14 +93,14 @@ class Register extends Component {
 
         <h5>Get started</h5>
 
-        <div className="ui segment mini grey labels">
-          <div className="ui ribbon label">Step 1</div>
+        <div className="ui segment">
+          <div className="ui mini grey ribbon label">Step 1</div>
           <hr style={{ visibility: 'hidden' }} />
           <CopyableArchiveEmailAddress value={ archiveEmailAddress } />
 
           <div className="ui divider"></div>
 
-          <div className="ui ribbon label">Step 2</div>
+          <div className="ui mini grey ribbon label">Step 2</div>
           <hr style={{ visibility: 'hidden' }} />
           <a className="ui teal submit button" href={ REPLAY_GG_URL } target="_blank">
             Sign up on replay.gg
@@ -108,13 +108,18 @@ class Register extends Component {
 
           <div className="ui divider"></div>
 
-          <div className="ui ribbon label">Step 3</div>
+          <div className="ui mini grey ribbon label">Step 3</div>
           <hr style={{ visibility: 'hidden' }} />
           {
             this.state.showWaiting ?
-            <div className="ui disabled button">
-              <i className="ui active small inline indeterminate loader"></i>
-              <span style={{ marginLeft: '1em' }}>Waiting on games from replay.gg – go play some LoL!</span>
+            <div>
+              <div className="ui disabled teal button">
+                <i className="ui active small inline indeterminate inverted loader"></i>
+                <span style={{ marginLeft: '1em' }}>Waiting on games from replay.gg – go play some LoL!</span>
+              </div>
+              <div className="ui small pointing label">
+                If it's been a while, you may not have registered correctly.
+              </div>
             </div> :
             <button className="ui teal submit button" onClick={ this.props.onRegisterAttempt }>
               Click here after signup
