@@ -18,5 +18,5 @@ var WebpackDevServer = require('webpack-dev-server'),
   webpackDevServer = new WebpackDevServer(compiler, serverOptions);
 
 webpackDevServer.listen(port, host, function() {
-  console.info('==> 🚧  Webpack development server listening on %s:%s', host, port);
+  console.info('==> Webpack development server listening on %s:%s', host, port);
 });
