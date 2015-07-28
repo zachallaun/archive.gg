@@ -80,7 +80,7 @@ routes.get('/:region/:summonerName', (req, res) => {
 
 routes.patch('/:region/:summonerName', (req, res) => {
   const { region, summonerName } = req.params;
-  const summoner = getSummoner({ region, summonerName });
+  const summoner = fetchSummoner({ region, summonerName });
   _.assign(summoner, req.body);
   res.json(summoner);
 });
