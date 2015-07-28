@@ -3,7 +3,6 @@
 var path = require('path');
 var webpack = require('webpack');
 var writeStats = require('./utils/writeStats');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var strip = require('strip-loader');
 
 var assetsPath = path.join(__dirname, '../static/dist');
@@ -39,10 +38,6 @@ module.exports = {
         exclude: /node_modules/,
         loaders: [strip.loader('debug'), 'babel?stage=0&optional=runtime&plugins=typecheck'],
       },
-      {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style', 'css!autoprefixer?browsers=last 2 version!sass'),
-      },
     ]
   },
   progress: true,
@@ -50,15 +45,16 @@ module.exports = {
     modulesDirectories: [
       'src',
       'node_modules',
-      'semantic',
     ],
-    extensions: ['', '.json', '.js']
+    extensions: ['', '.json', '.js'],
   },
   plugins: [
-
-    // css files from the extract-text-plugin loader
-    new ExtractTextPlugin('[name]-[chunkhash].css'),
-    new webpack.DefinePlugin({__CLIENT__: true, __SERVER__: false, __DEVELOPMENT__: false, __DEVTOOLS__: false}),
+    new webpack.DefinePlugin({
+      __CLIENT__: true,
+      __SERVER__: false,
+      __DEVELOPMENT__: false,
+      __DEVTOOLS__: false,
+    }),
 
     // ignore dev config
     new webpack.IgnorePlugin(/\.\/dev/, /\/config$/),
@@ -72,9 +68,8 @@ module.exports = {
         BROWSER: JSON.stringify(true),
 
         // Useful to reduce the size of client-side libraries, e.g. react
-        NODE_ENV: JSON.stringify('production')
-
-      }
+        NODE_ENV: JSON.stringify('production'),
+      },
     }),
 
     // optimizations
@@ -82,12 +77,11 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-          warnings: false
-        }
+        warnings: false,
+      },
     }),
 
     // stats
     function() { this.plugin('done', writeStats); }
-
   ]
 };

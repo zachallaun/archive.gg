@@ -3,10 +3,6 @@ import React, { Component, PropTypes } from 'react';
 import { Link, TransitionHook } from 'react-router';
 import { createTransitionHook } from 'utils/universalRouter';
 
-if (__CLIENT__) {
-  require('!style!css!dist/semantic.css');
-}
-
 class App extends Component {
   render() {
     return (

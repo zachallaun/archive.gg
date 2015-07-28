@@ -3,7 +3,6 @@ var webpack = require('webpack');
 var writeStats = require('./utils/writeStats');
 var notifyStats = require('./utils/notifyStats');
 var assetsPath = path.resolve(__dirname, '../static/dist');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var host = 'localhost';
 var port = parseInt(process.env.PORT) + 1 || 3001;
 
@@ -42,10 +41,6 @@ module.exports = {
         exclude: /node_modules/,
         loaders: ['react-hot', 'babel?stage=0&optional=runtime&plugins=typecheck', 'eslint-loader'],
       },
-      {
-        test: /\.scss$/,
-        loader: 'style!css!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true',
-      },
     ]
   },
   progress: true,
@@ -53,9 +48,8 @@ module.exports = {
     modulesDirectories: [
       'src',
       'node_modules',
-      'semantic',
     ],
-    extensions: ['', '.json', '.js']
+    extensions: ['', '.json', '.js'],
   },
   plugins: [
     // hot reload
@@ -65,7 +59,7 @@ module.exports = {
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,
-      __DEVTOOLS__: true  // <-------- DISABLE redux-devtools HERE
+      __DEVTOOLS__: true,  // <-------- DISABLE redux-devtools HERE
     }),
 
     // stats
