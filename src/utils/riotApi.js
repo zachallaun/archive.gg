@@ -11,13 +11,13 @@ if (!API_KEY && !__CLIENT__) {
 }
 
 function validateRegion(region) {
-  if (!regions[region]) {
+  if (!regions[region.toUpperCase()]) {
     throw `Unknown Riot region: ${region}`;
   }
 }
 
 function validateResource(resource) {
-  if (!resourceVersions[resource]) {
+  if (!resourceVersions[resource.toLowerCase()]) {
     throw `Unknown Riot resource: ${resource}`;
   }
 }

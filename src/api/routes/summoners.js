@@ -4,7 +4,7 @@ import { Router } from 'express';
 import registrationStates from 'constants/registrationStates';
 import riotApi from 'utils/riotApi';
 import crypto from 'crypto';
-import summoners, { findSummoner, insertSummoner } from 'db/summoners';
+import summoners, { findSummoner, insertSummoner, updateSummoner } from 'db/summoners';
 import matches, { findMatches } from 'db/matches';
 
 /* --- DB/API Helpers --- */
@@ -80,9 +80,12 @@ routes.get('/:region/:summonerName', (req, res) => {
 
 routes.patch('/:region/:summonerName', (req, res) => {
   const { region, summonerName } = req.params;
-  const summoner = fetchSummoner({ region, summonerName });
-  _.assign(summoner, req.body);
-  res.json(summoner);
+  const whitelistUpdates = _.pick(req.body, [
+    'registrationState',
+  ]);
+
+  updateSummoner({ region, summonerName }, whitelistUpdates)
+    .then(::res.json);
 });
 
 export default routes;

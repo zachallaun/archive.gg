@@ -130,7 +130,7 @@ routes.post('/by-email', (req, res) => {
     })
     .then(insertMatch)
     .then(match => {
-      return updateSummoner(match.summonerId, {
+      return updateSummoner({id: match.summonerId}, {
         registrationState: registrationStates.REGISTERED,
       });
     })

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { query } from 'db/pg';
 import sql from 'sql';
 import { standardizedSummonerName } from 'utils/riotApi';
@@ -54,8 +55,14 @@ export function insertSummoner(summoner) {
   return query(summoners.insert(summoner).toQuery()).then(() => summoner);
 }
 
-export function updateSummoner(id, updates) {
-  return query(summoners.update(updates).where(summoners.id.equals(id)).toQuery());
+export function updateSummoner(whereClauses, updates) {
+  const initialQuery = summoners.update(updates);
+
+  let q = _.reduce(whereClauses, (q, val, attr) => {
+    return q.where(summoners[attr].equals(val))
+  }, initialQuery);
+
+  return query(q.toQuery());
 }
 
 export default summoners;
