@@ -1,3 +1,4 @@
+/* global __CLIENT__ */
 import React, { Component, PropTypes } from 'react';
 import SummonerInfo from 'components/SummonerInfo';
 import { bindActionCreators } from 'redux';
@@ -37,13 +38,9 @@ export default class SummonerContainer extends Component {
     dispatch: PropTypes.func.isRequired,
   }
 
-  static fetchData(store, { region, summonerName }) {
-    const promise = store.dispatch(summonerActions.load(region, summonerName));
-
-    if (!isSummonerLoaded(store.getState().summoners, region, summonerName)) {
-      return promise;
-    } else {
-      return [];
+  static fetchData(store, { region, summonerName }, { navigationType }) {
+    if (!__CLIENT__ || navigationType === 'PUSH') {
+      return store.dispatch(summonerActions.loadSummoner(region, summonerName));
     }
   }
 

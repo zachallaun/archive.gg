@@ -17,7 +17,7 @@ export function createTransitionHook(store) {
       })
       .map(getFetchData)
       .map(fetchData => {
-        return fetchData(store, _.mapValues(nextState.params, decodeURI));
+        return fetchData(store, _.mapValues(nextState.params, decodeURI), nextState.location);
       }))
       .then(() => {
         if (callback) callback(); // can't just pass callback to then() because callback assumes first param is error

@@ -3,24 +3,17 @@ import selectn from 'selectn';
 import { Router } from 'express';
 import registrationStates from 'constants/registrationStates';
 import riotApi from 'utils/riotApi';
-import crypto from 'crypto';
-import summoners, { findSummoner, insertSummoner, updateSummoner } from 'db/summoners';
+import summoners, { findSummoner, insertSummoner, updateSummoner, genEmail } from 'db/summoners';
 import matches, { findMatches } from 'db/matches';
 
 /* --- DB/API Helpers --- */
-
-function emailToken(summonerName) {
-  const shasum = crypto.createHash('sha1');
-  shasum.update(summonerName);
-  return shasum.digest('hex');
-}
 
 function summonerFields(region, { id, name, profileIconId }) {
   return {
     id,
     region,
     summonerName: name,
-    archiveEmailAddress: `replay+${emailToken(name)}@archive.gg`,
+    archiveEmailAddress: genEmail(name),
     profileIconUrl: riotApi.imgUrl('profileicon', profileIconId),
     registrationState: registrationStates.NOT_REGISTERED,
   };

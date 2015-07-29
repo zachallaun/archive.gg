@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { query } from 'db/pg';
 import sql from 'sql';
 import { standardizedSummonerName } from 'utils/riotApi';
+import crypto from 'crypto';
 
 const summoners = sql.define({
   name: 'summoners',
@@ -19,6 +20,16 @@ const summoners = sql.define({
 
 function caseInsensitiveEquals(attr, value) {
   return sql.functions.LOWER(attr).equals(value.toLowerCase());
+}
+
+function emailToken(summonerName) {
+  const shasum = crypto.createHash('sha1');
+  shasum.update(summonerName);
+  return shasum.digest('hex');
+}
+
+export function genEmail(summonerName) {
+  return `replay+${emailToken(summonerName)}@archive.gg`;
 }
 
 // Accepts archiveEmailAddress OR region and summonerName

@@ -8,7 +8,7 @@ import {
   SUMMONER_UPDATE_FAIL,
 } from 'constants/actionTypes';
 
-function load(region, summonerName) {
+function loadSummoner(region, summonerName) {
   return {
     summoner: { region, summonerName },
     types: [SUMMONER_LOAD, SUMMONER_LOAD_SUCCESS, SUMMONER_LOAD_FAIL],
@@ -30,6 +30,6 @@ function updateSummoner(summoner, updates) {
 }
 
 export default {
-  load,
+  loadSummoner,
   updateSummoner,
 };
