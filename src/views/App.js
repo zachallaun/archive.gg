@@ -26,7 +26,7 @@ const style = {
 class App extends Component {
   render() {
     return (
-      <div id="archivegg-app-1" style={{ height: '100%', ...style.flexDirectionColumn }}>
+      <div id="archivegg-app-1" style={{ minHeight: '100vh', ...style.flexDirectionColumn }}>
         <div className="ui center aligned very padded basic teal segment">
           <Link className="ui huge teal header" to="/">
             archive.gg<sup style={{ top: '-.75em', fontSize: '50%' }}>beta</sup>
