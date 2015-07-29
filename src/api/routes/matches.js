@@ -43,7 +43,10 @@ function matchFields({ region, id: summonerId }, apiData, matchInfo) {
   }, {});
 
   const summonerInfo = _.find(participants, participant => {
-    return summonersByParticipantId[participant.participantId].summonerId === summonerId;
+    const s = summonersByParticipantId[participant.participantId];
+    if (s) {
+      return s.summonerId === summonerId;
+    }
   });
 
   if (!summonerInfo) {
