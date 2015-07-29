@@ -32,7 +32,7 @@ function toMatchInfo(hrefs) {
       matchId,
       matchHistoryUrl,
       replayUrl,
-      replayUnsubscribeUrl,
+      replayUnsubscribeUrl: replayUnsubscribeUrl.replace('&amp;', '&'),
     };
   }
 }
