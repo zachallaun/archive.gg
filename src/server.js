@@ -27,6 +27,10 @@ if (!__DEVELOPMENT__) {
 
 app.use(require('serve-static')(path.join(__dirname, '..', 'static')));
 
+app.use('/riot.txt', (req, res) => {
+  res.type('text/plain').send(process.env.RIOT_GAMES_VERIFICATION_TOKEN).end();
+});
+
 // Proxy to API server
 app.use('/api', (req, res) => {
   proxy.web(req, res);
