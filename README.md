@@ -1,6 +1,9 @@
 # archive.gg
 
-League of Legends replay archive
+League of Legends replay archive. Provides folks with a unique email
+address with which to register at [replay.gg](http://replay.gg).
+Archive.gg stores replays sent to it via replay.gg, and provides a
+match history of these games to summoners.
 
 ## Local development
 
