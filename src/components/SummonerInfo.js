@@ -172,7 +172,7 @@ export default class SummonerInfo extends Component {
     const { summonerName, region, division, profileIconUrl } = this.props.summoner;
 
     return (
-      <div className="ui two column centered grid">
+      <div className="ui two column centered doubling grid container">
         <div className="column">
           <div className="ui items">
             <div className="item">
@@ -200,7 +200,7 @@ export default class SummonerInfo extends Component {
     }[this.props.summoner.registrationState];
 
     return (
-      <div className="ui two column centered grid">
+      <div className="ui two column centered doubling grid container">
         <div className="column">
           { this.renderSummonerSummary() }
 

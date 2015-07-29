@@ -37,7 +37,7 @@ class SummonerNav extends Component {
   render() {
     return (
       <div>
-        <div className="ui two column centered grid">
+        <div className="ui two column centered doubling grid">
           <div className="column">
             <form className="ui large form" onSubmit={ ::this.navigate }>
               <div className="ui raised segment">
