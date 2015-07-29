@@ -67,7 +67,11 @@ app.use((req, res) => {
             }
           </head>
           <body>
-            <div id="content" dangerouslySetInnerHTML={{ __html: React.renderToString(component) }}/>
+            <div
+              id="content"
+              style={{ height: '100%' }}
+              dangerouslySetInnerHTML={{ __html: React.renderToString(component) }}
+            />
             <script dangerouslySetInnerHTML={{ __html: `window.__data=${JSON.stringify(store.getState())};` }}/>
             <script src={ webpackStats.script[0] }/>
           </body>
