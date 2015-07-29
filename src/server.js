@@ -57,7 +57,7 @@ app.use((req, res) => {
             <meta charSet="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
             <meta name="description" content="League of Legends replay archive" />
-            <link rel="shortcut icon" href="/favicon.ico" />
+            <link rel="shortcut icon" href="/favicon.ico?v2" />
             <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css" />
             <link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.0.7/semantic.css" media="screen, projection" rel="stylesheet" type="text/css" />
             {
