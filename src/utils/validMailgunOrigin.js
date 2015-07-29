@@ -8,8 +8,6 @@ if (!MAILGUN_API_KEY) {
 }
 
 export default function validMailgunOrigin({ timestamp, token, signature }) {
-  console.log(timestamp, token, signature);
-
   if (!timestamp || !token || !signature) {
     return false;
   }

@@ -141,7 +141,7 @@ routes.post('/by-email', (req, res) => {
       if (error && error.status === 429) {
         res.status(429).end();
       } else {
-        console.log('ERROR:', error);
+        console.log('ERROR:', error instanceof Error ? error.stack : error);
         res.status(406).end();
       }
     });

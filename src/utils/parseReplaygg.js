@@ -31,8 +31,8 @@ function toMatchInfo(hrefs) {
     return {
       matchId,
       matchHistoryUrl,
-      replayUrl,
-      replayUnsubscribeUrl: replayUnsubscribeUrl.replace(/&amp;/g, '&'),
+      replayUnsubscribeUrl,
+      replayUrl: replayUrl.replace(/&amp;/g, '&'),
     };
   }
 }

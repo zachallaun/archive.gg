@@ -66,7 +66,7 @@ routes.get('/:region/:summonerName', (req, res) => {
   fetchSummoner(region, summonerName).then(summoner => {
     res.json(summoner);
   }).catch(error => {
-    console.log('ERROR:', error);
+    console.log('ERROR:', error instanceof Error ? error.stack : error);
     res.status(500).json(error);
   });
 });
@@ -77,8 +77,10 @@ routes.patch('/:region/:summonerName', (req, res) => {
     'registrationState',
   ]);
 
-  updateSummoner({ region, summonerName }, whitelistUpdates)
-    .then(::res.json);
+  updateSummoner({ region, summonerName }, whitelistUpdates).then(::res.json).catch(error => {
+    console.log('ERROR:', error instanceof Error ? error.stack : error);
+    res.status(500).json(error);
+  });
 });
 
 export default routes;
