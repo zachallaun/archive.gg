@@ -29,7 +29,7 @@ function emailToken(summonerName) {
 }
 
 export function genEmail(summonerName) {
-  return `replay+${emailToken(summonerName)}@archive.gg`;
+  return `replay+${emailToken(summonerName)}@mail.archive.gg`;
 }
 
 // Accepts archiveEmailAddress OR region and summonerName
