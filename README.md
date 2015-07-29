@@ -1,15 +1,20 @@
 # archive.gg
 
-## Database
+League of Legends replay archive
 
-In `.env`, export `DATABASE_URL`:
+## Local development
 
-```
-DATABASE_URL=postgres:///archivegg
-```
+**Dependencies:** Node.js, npm, Postgres. Install application
+dependencies by running `npm install` in this project's root
+directory.
 
-To run migrations:
+**Environment:** Copy `.env.example` to `.env` and modify with your
+own Riot Games development API key.
 
-```
-node node_modules/db-migrate/bin/db-migrate up
-```
+**Database:** Run `node node_modules/db-migrate/bin/db-migrate up` to
+create DB tables.
+
+**Development server:** Run `npm run dev`, visit
+`localhost:3000`. Almost no code changes to the client or server
+require the development server to be restarted or the browser to be
+refreshed - code will be hot-loaded.
