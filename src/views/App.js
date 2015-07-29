@@ -5,20 +5,20 @@ import { createTransitionHook } from 'utils/universalRouter';
 
 const style = {
   flexDirectionColumn: {
-    '-webkit-box-direction': 'normal',
-    '-webkit-box-orient': 'vertical',
-    '-webkit-flex-direction': 'column',
-    '-moz-flex-direction': 'column',
-    '-ms-flex-direction': 'column',
-    'flex-direction': 'column',
+    WebkitBoxDirection: 'normal',
+    WebkitBoxOrient: 'vertical',
+    WebkitFlexDirection: 'column',
+    MozFlexDirection: 'column',
+    msFlexDirection: 'column',
+    flexDirection: 'column',
   },
 
   flex1: {
-    '-webkit-box-flex': 1,
-    '-webkit-flex': 1,
-    '-moz-box-flex': 1,
-    '-moz-flex': 1,
-    '-ms-flex': 1,
+    WebkitBoxFlex: 1,
+    WebkitFlex: 1,
+    MozBoxFlex: 1,
+    MozFlex: 1,
+    mxFlex: 1,
     flex: 1,
   },
 };
