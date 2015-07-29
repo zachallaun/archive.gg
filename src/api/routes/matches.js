@@ -37,18 +37,24 @@ function matchFields({ region, id: summonerId }, apiData, matchInfo) {
     participantIdentities
   } = apiData;
 
+  // TODO
+  // Support queueTypes other than ranked. The problem is that
+  // participantIdentity.player is only available for ranked games. For
+  // normals/customs, we'll have to figure out which champ the summoner
+  // played by looking at the subject of the replay.gg email or
+  // something.
+  if (!queueType.match(/ranked/i)) {
+    throw `queueType ${queueType} currently unsupported`;
+  }
+
   const summonersByParticipantId = participantIdentities.reduce((o, p) => {
     o[p.participantId] = p.player;
     return o;
   }, {});
 
-  console.log(JSON.stringify(apiData));
-
   const summonerInfo = _.find(participants, participant => {
     const s = summonersByParticipantId[participant.participantId];
-    if (s) {
-      return s.summonerId === summonerId;
-    }
+    return s.summonerId === summonerId;
   });
 
   if (!summonerInfo) {
@@ -65,7 +71,7 @@ function matchFields({ region, id: summonerId }, apiData, matchInfo) {
       deaths,
       assists,
       winner,
-    }
+    },
   } = summonerInfo;
 
   const {
