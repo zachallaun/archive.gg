@@ -203,7 +203,13 @@ export default class SummonerInfo extends Component {
       <div className="ui two column centered grid">
         <div className="column">
           { this.renderSummonerSummary() }
+
           <div className="ui hidden divider"></div>
+
+          <div className="ui warning message">
+            For now, only replays of ranked games will be archived. More queue types will be supported in the future.
+          </div>
+
           <RegistrationStateComponent { ...this.props } />
         </div>
       </div>
