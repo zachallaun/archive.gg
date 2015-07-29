@@ -42,6 +42,8 @@ function matchFields({ region, id: summonerId }, apiData, matchInfo) {
     return o;
   }, {});
 
+  console.log(JSON.stringify(summonersByParticipantId));
+
   const summonerInfo = _.find(participants, participant => {
     const s = summonersByParticipantId[participant.participantId];
     if (s) {
