@@ -23,14 +23,18 @@ function caseInsensitiveEquals(attr, value) {
   return sql.functions.LOWER(attr).equals(value.toLowerCase());
 }
 
-export function genToken(summonerName) {
+export function genToken(id) {
+  return `archivegg-${id}`;
+}
+
+function genEmailToken(summonerName) {
   const shasum = crypto.createHash('sha1');
   shasum.update(summonerName);
   return shasum.digest('hex').slice(0, 25);
 }
 
 export function genEmail(summonerName) {
-  return `replay+${genToken(summonerName)}@mail.archive.gg`;
+  return `replay+${genEmailToken(summonerName)}@mail.archive.gg`;
 }
 
 // Accepts archiveEmailAddress OR region and summonerName

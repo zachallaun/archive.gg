@@ -1,15 +1,12 @@
 var dbm = global.dbm || require('db-migrate');
 var type = dbm.dataType;
 var async = require('async');
-var crypto = require('crypto');
 var pg = require('pg');
 
 var DATABASE_URL = process.env.DATABASE_URL;
 
-function genToken(summonerName) {
-  var shasum = crypto.createHash('sha1');
-  shasum.update(summonerName);
-  return shasum.digest('hex').slice(0, 25);
+function genToken(id) {
+  return 'archivegg-' + id;
 }
 
 exports.up = function(db, callback) {
@@ -38,7 +35,7 @@ exports.up = function(db, callback) {
 
         async.series(resp.rows.map(function (summoner) {
           return function (callback) {
-            var values = [genToken(summoner.summonerName), summoner.id];
+            var values = [genToken(summoner.id), summoner.id];
 
             console.log(q, values);
 

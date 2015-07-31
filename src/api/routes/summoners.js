@@ -25,7 +25,7 @@ function summonerFields(region, { id, name, profileIconId }) {
     id,
     region,
     summonerName: name,
-    token: genToken(name),
+    token: genToken(id),
     archiveEmailAddress: genEmail(name),
     profileIconUrl: riotApi.imgUrl('profileicon', profileIconId),
     registrationState: registrationStates.NOT_REGISTERED,
@@ -149,9 +149,13 @@ routes.post('/:region/:id/deregister', (req, res) => {
     .then(verifyRunePage)
     .then(summoner => {
       if (summoner) {
-        updateSummoner({ id }, { registrationState: registrationStates.NOT_REGISTERED })
-          .then(() => res.json({ replayUnsubscribeUrl: summoner.replayUnsubscribeUrl }))
-          .catch(error => handleError(res, error));
+        if (summoner.replayUnsubscribeUrl) {
+          updateSummoner({ id }, { registrationState: registrationStates.NOT_REGISTERED })
+            .then(() => res.json({ replayUnsubscribeUrl: summoner.replayUnsubscribeUrl }))
+            .catch(error => handleError(res, error));
+        } else {
+          res.json({});
+        }
       } else {
         res.status(403).end();
       }
