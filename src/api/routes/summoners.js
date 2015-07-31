@@ -54,7 +54,13 @@ function fetchSummoner(region, summonerName) {
     } else {
       return fetchSummonerFromApi(region, summonerName).then(insertSummoner);
     }
-  }).then(fetchMatches);
+  }).then(summoner => {
+    if (summoner.registrationState === registrationStates.REGISTERED) {
+      return fetchMatches(summoner);
+    } else {
+      return summoner;
+    }
+  });
 }
 
 const summonerWhitelist = [
@@ -85,7 +91,7 @@ const matchWhitelist = [
 function renderSummoner(summoner) {
   return {
     ..._.pick(summoner, summonerWhitelist),
-    matches: summoner.matches.map((m) => {
+    matches: summoner.matches && summoner.matches.map((m) => {
       return _.pick(m, matchWhitelist)
     }),
   };
