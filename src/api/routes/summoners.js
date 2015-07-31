@@ -25,8 +25,8 @@ function fetchSummonerFromApi(region, summonerName) {
   return riotApi
     .summoner
     .byName(region, summonerName)
-    .then(data => {
-      _.assign(summoner, summonerFields(region, data));
+    .then(apiData => {
+      _.assign(summoner, summonerFields(region, apiData));
       return riotApi.league.bySummoner(region, summoner.id);
     })
     .then(entries => {

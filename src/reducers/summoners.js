@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import selectn from 'selectn';
 import ReactWithAddons from 'react/addons';
+import { standardizedSummonerName } from 'utils/riotApi';
 import regionNames from 'constants/riot/regions';
 import {
   SUMMONER_LOAD,
@@ -26,7 +27,7 @@ function getInitialState() {
 const initialState = getInitialState();
 
 export function getSummoner(state, region, summonerName) {
-  return selectn(`${region.toUpperCase()}.${summonerName.toLowerCase()}`, state);
+  return selectn(`${region.toUpperCase()}.${standardizedSummonerName(summonerName)}`, state);
 }
 
 export function isSummonerLoaded(state, region, summonerName) {
@@ -40,7 +41,7 @@ function undo(current, original, changes) {
 function updateSummoner(state, summoner, spec) {
   return update(state, {
     [summoner.region.toUpperCase()]: {
-      [summoner.summonerName.toLowerCase()]: spec,
+      [standardizedSummonerName(summoner.summonerName)]: spec,
     },
   });
 }

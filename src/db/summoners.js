@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { query } from 'db/pg';
 import sql from 'sql';
-import { standardizedSummonerName } from 'utils/riotApi';
 import crypto from 'crypto';
 
 const summoners = sql.define({
@@ -63,7 +62,17 @@ export function findSummoner({ id, region, summonerName, archiveEmailAddress }) 
 }
 
 export function insertSummoner(summoner) {
-  return query(summoners.insert(summoner).toQuery()).then(() => summoner);
+  const [keys, values] = [_.keys(summoner), _.values(summoner)]
+
+  const q = `
+    INSERT INTO summoners (${ keys.map(k => `"${k}"`).join(', ') })
+      SELECT ${ values.map((v, i) => `$${i + 1}`).join(', ') }
+      WHERE NOT EXISTS (
+        SELECT 1 FROM summoners WHERE summoners.id = $${values.length + 1}
+      )
+  `
+
+  return query({text: q, values: values.concat(summoner.id)}).then(() => summoner);
 }
 
 export function updateSummoner(whereClauses, updates) {
