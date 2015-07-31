@@ -107,6 +107,10 @@ summoner.byName = function byName(region, name) {
   const url = apiUrl(region, `summoner/by-name/${name}`);
   return get(url, { extract: standardizedSummonerName(name) });
 };
+summoner.runes = function runes(region, id) {
+  const url = apiUrl(region, `summoner/${id}/runes`);
+  return get(url, { extract: id });
+};
 
 /* --- Data Dragon (static assets) --- */
 

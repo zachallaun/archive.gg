@@ -10,6 +10,10 @@ import {
 
   SUMMONER_UPDATE,
   SUMMONER_UPDATE_FAIL,
+
+  SUMMONER_DEREGISTER,
+  SUMMONER_DEREGISTER_SUCCESS,
+  SUMMONER_DEREGISTER_FAIL,
 } from 'constants/actionTypes';
 
 const { update } = ReactWithAddons.addons;
@@ -69,6 +73,22 @@ export default function summoners(state = initialState, action = {}) {
     case SUMMONER_UPDATE_FAIL:
       return updateSummoner(state, action.summoner, {
         $apply: (s) => undo(s, action.summoner, action.updates),
+      });
+
+    case SUMMONER_DEREGISTER:
+      return updateSummoner(state, action.summoner, {
+        deregisterState: {$set: SUMMONER_DEREGISTER},
+      });
+
+    case SUMMONER_DEREGISTER_SUCCESS:
+      return updateSummoner(state, action.summoner, {
+        replayUnsubscribeUrl: {$set: action.result.replayUnsubscribeUrl},
+        deregisterState: {$set: SUMMONER_DEREGISTER_SUCCESS},
+      });
+
+    case SUMMONER_DEREGISTER_FAIL:
+      return updateSummoner(state, action.summoner, {
+        deregisterState: {$set: SUMMONER_DEREGISTER_FAIL},
       });
 
     default:

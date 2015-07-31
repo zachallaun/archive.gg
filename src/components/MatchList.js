@@ -95,8 +95,10 @@ export default class MatchList extends Component {
     const { matches } = this.props.summoner;
 
     return (
-      <div className="ui divided items">
-        { matches.map(match => <Match match={ match } key={ match.id } />) }
+      <div>
+        <div className="ui divided items">
+          { matches.map(match => <Match match={ match } key={ match.id } />) }
+        </div>
       </div>
     );
   }

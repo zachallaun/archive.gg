@@ -1,62 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import MatchList from 'components/MatchList';
-import ZeroClipboard from 'react-zeroclipboard';
-import classSet from 'react-classset';
+import Deregister from 'components/Deregister';
+import CopyableField from 'components/CopyableField';
 import { REPLAY_GG_URL } from 'constants/misc';
 import {
   NOT_REGISTERED,
   REGISTRATION_PENDING,
   REGISTERED,
 } from 'constants/registrationStates';
-
-class CopyableArchiveEmailAddress extends Component {
-  static propTypes = {
-    value: PropTypes.string.isRequired,
-  }
-
-  constructor() {
-    super();
-    this.state = {
-      showPopup: false,
-    };
-  }
-
-  onCopy(e) {
-    const { target } = e;
-
-    this.setState({ showPopup: true });
-    setTimeout(() => {
-      this.setState({ showPopup: false });
-      target.blur();
-    }, 1000);
-  }
-
-  render() {
-    const { value } = this.props;
-
-    const popupClassName = classSet({
-      'ui inverted tiny popup top left': true,
-      'visible': this.state.showPopup,
-    });
-
-    return (
-      <div style={{ position: 'relative' }}>
-        <div className={ popupClassName } style={{ top: -50, left: 5, right: 'initial' }}>
-          Copied!
-        </div>
-        <div className="ui fluid left action input">
-          <ZeroClipboard text={ value }>
-            <button className="ui teal left labeled icon button" onClick={ ::this.onCopy }>
-              <i className="copy icon"></i>
-              Copy
-            </button>
-          </ZeroClipboard>
-          <input value={ value } type="text" readOnly />
-        </div>
-      </div>
-    );
-  }
-}
 
 class Register extends Component {
   static propTypes = {
@@ -96,7 +47,7 @@ class Register extends Component {
         <div className="ui segment">
           <div className="ui mini grey ribbon label">Step 1</div>
           <hr style={{ visibility: 'hidden' }} />
-          <CopyableArchiveEmailAddress value={ archiveEmailAddress } />
+          <CopyableField value={ archiveEmailAddress } />
 
           <div className="ui divider"></div>
 
@@ -165,6 +116,7 @@ export default class SummonerInfo extends Component {
       registrationState: PropTypes.string.isRequired,
       archiveEmailAddress: PropTypes.string.isRequired,
       profileIconUrl: PropTypes.string.isRequired,
+      replayUnsubscribeUrl: PropTypes.string,
     }).isRequired,
   }
 
@@ -193,11 +145,12 @@ export default class SummonerInfo extends Component {
   }
 
   render() {
+    const { registrationState, replayUnsubscribeUrl } = this.props.summoner;
     const RegistrationStateComponent = {
       [REGISTERED]: MatchList,
       [NOT_REGISTERED]: Registration,
       [REGISTRATION_PENDING]: Registration,
-    }[this.props.summoner.registrationState];
+    }[registrationState];
 
     return (
       <div className="ui two column centered doubling grid container">
@@ -212,6 +165,12 @@ export default class SummonerInfo extends Component {
           </div>
 
           <RegistrationStateComponent { ...this.props } />
+
+          {
+            registrationState === REGISTERED || replayUnsubscribeUrl ?
+            <Deregister { ...this.props } /> :
+            null
+          }
         </div>
       </div>
     );

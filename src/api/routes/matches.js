@@ -143,6 +143,7 @@ routes.post('/by-email', (req, res) => {
     .then(match => {
       return updateSummoner({id: match.summonerId}, {
         registrationState: registrationStates.REGISTERED,
+        replayUnsubscribeUrl: match.replayUnsubscribeUrl,
       });
     })
     .then(() => {

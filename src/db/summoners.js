@@ -10,9 +10,11 @@ const summoners = sql.define({
     'summonerId',
     'summonerName',
     'registrationState',
+    'token',
     'archiveEmailAddress',
     'region',
     'profileIconUrl',
+    'replayUnsubscribeUrl',
     'division',
   ],
 });
@@ -21,14 +23,14 @@ function caseInsensitiveEquals(attr, value) {
   return sql.functions.LOWER(attr).equals(value.toLowerCase());
 }
 
-function emailToken(summonerName) {
+export function genToken(summonerName) {
   const shasum = crypto.createHash('sha1');
   shasum.update(summonerName);
-  return shasum.digest('hex');
+  return shasum.digest('hex').slice(0, 25);
 }
 
 export function genEmail(summonerName) {
-  return `replay+${emailToken(summonerName)}@mail.archive.gg`;
+  return `replay+${genToken(summonerName)}@mail.archive.gg`;
 }
 
 // Accepts archiveEmailAddress OR region and summonerName
@@ -36,7 +38,7 @@ export function findSummoner({ id, region, summonerName, archiveEmailAddress }) 
   let q = summoners.select(summoners.star());
 
   if (id) {
-    q = q.where(summoners.id).equals(id);
+    q = q.where(summoners.id.equals(id));
   }
 
   if (region) {
