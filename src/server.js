@@ -84,11 +84,11 @@ app.use((req, res) => {
         </html>
       ));
     } catch (error) {
-      console.error('ERROR', error);
+      console.error('ERROR:', error instanceof Error ? error.stack : error);
       res.status(500).send({ error });
     }
   }, (error) => {
-    console.error('ERROR', error);
+    console.error('ERROR:', error instanceof Error ? error.stack : error);
     res.status(500).send({ error });
   });
 });

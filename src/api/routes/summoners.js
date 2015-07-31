@@ -57,15 +57,47 @@ function fetchSummoner(region, summonerName) {
   }).then(fetchMatches);
 }
 
+const summonerWhitelist = [
+  'id',
+  'summonerName',
+  'region',
+  'registrationState',
+  'archiveEmailAddress',
+  'profileIconUrl',
+  'division',
+];
+
+const matchWhitelist = [
+  'id',
+  'championId',
+  'championKey',
+  'matchDuration',
+  'matchCreation',
+  'queueType',
+  'kills',
+  'deaths',
+  'assists',
+  'winner',
+  'matchHistoryUrl',
+  'replayUrl',
+];
+
+function renderSummoner(summoner) {
+  return {
+    ..._.pick(summoner, summonerWhitelist),
+    matches: summoner.matches.map((m) => {
+      return _.pick(m, matchWhitelist)
+    }),
+  };
+}
+
 /* --- Routes --- */
 
 const routes = Router();
 
 routes.get('/:region/:summonerName', (req, res) => {
   const { region, summonerName } = req.params;
-  fetchSummoner(region, summonerName).then(summoner => {
-    res.json(summoner);
-  }).catch(error => {
+  fetchSummoner(region, summonerName).then(renderSummoner).then(::res.json).catch(error => {
     console.log('ERROR:', error instanceof Error ? error.stack : error);
     res.status(500).json(error);
   });
@@ -77,7 +109,7 @@ routes.patch('/:region/:summonerName', (req, res) => {
     'registrationState',
   ]);
 
-  updateSummoner({ region, summonerName }, whitelistUpdates).then(::res.json).catch(error => {
+  updateSummoner({ region, summonerName }, whitelistUpdates).then(renderSummoner).then(::res.json).catch(error => {
     console.log('ERROR:', error instanceof Error ? error.stack : error);
     res.status(500).json(error);
   });
