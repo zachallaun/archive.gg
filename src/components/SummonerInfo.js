@@ -207,7 +207,8 @@ export default class SummonerInfo extends Component {
           <div className="ui hidden divider"></div>
 
           <div className="ui warning message">
-            For now, only replays of ranked games will be archived. More queue types will be supported in the future.
+            <p>For now, only replays of ranked games will be tracked. More queue types will be supported in the future.</p>
+            <p>Please keep in mind that Replay.gg does not store replays forever, and will currently be deleted after 7 days of inactivity or 30 days maximum.</p>
           </div>
 
           <RegistrationStateComponent { ...this.props } />
