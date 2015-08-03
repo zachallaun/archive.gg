@@ -47,16 +47,16 @@ function staticDataApiUrl(region, resourcePath) {
 }
 
 function get(url, { extract, query = {} } = {}) {
-  if (__DEVELOPMENT__) {
-    console.info(`Riot API GET: ${url}`);
-  }
-
   return new Promise((resolve, reject) => {
     request
       .get(url)
       .query({api_key: API_KEY})
       .query(query)
       .end((err, res) => {
+        if (__DEVELOPMENT__) {
+          console.info(`Riot API GET: (${res.status}) ${url}`);
+        }
+
         if (err) {
           reject(err);
         } else {

@@ -1,80 +1,6 @@
 import _ from 'lodash';
-import selectn from 'selectn';
 import { Router } from 'express';
-import registrationStates from 'constants/registrationStates';
-import riotApi from 'utils/riotApi';
-import summoners, { findSummoner, insertSummoner, updateSummoner, genEmail, genToken } from 'db/summoners';
-import matches, { findMatches } from 'db/matches';
-
-/* --- DB/API Helpers --- */
-
-function verifyRunePage(summoner) {
-  const { id, region, token } = summoner;
-
-  return riotApi.summoner.runes(region, id).then(({ pages }) => {
-    if (_.findWhere(pages, { name: token })) {
-      return summoner;
-    } else {
-      return null;
-    }
-  });
-}
-
-function summonerFields(region, { id, name, profileIconId }) {
-  return {
-    id,
-    region,
-    summonerName: name,
-    token: genToken(id),
-    archiveEmailAddress: genEmail(name),
-    profileIconUrl: riotApi.imgUrl('profileicon', profileIconId),
-    registrationState: registrationStates.NOT_REGISTERED,
-  };
-}
-
-function fetchSummonerFromApi(region, summonerName) {
-  let summoner = {};
-
-  return riotApi
-    .summoner
-    .byName(region, summonerName)
-    .then(apiData => {
-      _.assign(summoner, summonerFields(region, apiData));
-      return riotApi.league.bySummoner(region, summoner.id);
-    })
-    .then(entries => {
-      const rankedData = _.findWhere(entries, { queue: 'RANKED_SOLO_5x5' });
-      if (rankedData) {
-        summoner.division = `${_.capitalize(rankedData.tier.toLowerCase())} ${rankedData.entries[0].division}`;
-      }
-      return summoner;
-    });
-}
-
-function fetchMatches(summoner) {
-  return findMatches({ summonerId: summoner.id }).then(matches => {
-    return {
-      ...summoner,
-      matches,
-    };
-  });
-}
-
-function fetchSummoner(region, summonerName) {
-  return findSummoner({ region, summonerName }).then(summoner => {
-    if (summoner) {
-      return summoner;
-    } else {
-      return fetchSummonerFromApi(region, summonerName).then(insertSummoner);
-    }
-  }).then(summoner => {
-    if (summoner.registrationState === registrationStates.REGISTERED) {
-      return fetchMatches(summoner);
-    } else {
-      return summoner;
-    }
-  });
-}
+import { fetchSummoner, updateSummoner, deregisterSummoner } from 'models/summoners';
 
 const summonerWhitelist = [
   'id',
@@ -111,8 +37,6 @@ function renderSummoner(summoner) {
   };
 }
 
-/* --- Routes --- */
-
 function handleError(res, error) {
   console.log('ERROR:', error instanceof Error ? error.stack : error);
   res.status(500).end();
@@ -145,24 +69,13 @@ routes.patch('/:region/:summonerName', (req, res) => {
 routes.post('/:region/:id/deregister', (req, res) => {
   const { id, region } = req.params;
 
-  findSummoner({ id, region })
-    .then(verifyRunePage)
-    .then(summoner => {
-      if (summoner) {
-        if (summoner.replayUnsubscribeUrl) {
-          updateSummoner({ id }, { registrationState: registrationStates.NOT_REGISTERED })
-            .then(() => res.json({ replayUnsubscribeUrl: summoner.replayUnsubscribeUrl }))
-            .catch(error => handleError(res, error));
-        } else {
-          res.json({});
-        }
-      } else {
-        res.status(403).end();
-      }
-    })
-    .catch(error => {
-      handleError(res, error);
-    });
+  deregisterSummoner({ id, region }).then(summoner => {
+    if (summoner) {
+      res.json({ replayUnsubscribeUrl: summoner.replayUnsubscribeUrl });
+    } else {
+      res.status(403).end();
+    }
+  }).catch(error => handleError(res, error));
 });
 
 export default routes;
