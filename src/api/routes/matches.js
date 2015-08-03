@@ -7,6 +7,8 @@ import summoners, { findSummoner, updateSummoner } from 'db/summoners';
 import matches, { findMatch, insertMatch } from 'db/matches';
 import registrationStates from 'constants/registrationStates';
 
+// TODO: Move much of this into models/matches.js
+
 /* --- DB/API Helpers --- */
 
 function ensureMatchNotInDB(summoner, { matchId }) {
