@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { query } from 'db/pg';
 import sql from 'sql';
 import crypto from 'crypto';
+import registrationStates from 'constants/registrationStates';
 
 const summoners = sql.define({
   name: 'summoners',
@@ -16,6 +17,7 @@ const summoners = sql.define({
     'profileIconUrl',
     'replayUnsubscribeUrl',
     'division',
+    'lastFetched',
   ],
 });
 
@@ -23,7 +25,7 @@ function caseInsensitiveEquals(attr, value) {
   return sql.functions.LOWER(attr).equals(value.toLowerCase());
 }
 
-export function genToken(id) {
+function genToken(id) {
   return `archivegg-${id}`;
 }
 
@@ -33,8 +35,20 @@ function genEmailToken(summonerName) {
   return shasum.digest('hex').slice(0, 25);
 }
 
-export function genEmail(summonerName) {
+function genEmail(summonerName) {
   return `replay+${genEmailToken(summonerName)}@mail.archive.gg`;
+}
+
+function extractSummoner(rows) {
+  const s = rows[0];
+
+  if (s) {
+    return {
+      ...s,
+      id: parseInt(s.id, 10),
+      lastFetched: s.lastFetched && parseInt(s.lastFetched, 10)
+    };
+  }
 }
 
 // Accepts archiveEmailAddress OR region and summonerName
@@ -57,18 +71,25 @@ export function findSummoner({ id, region, summonerName, archiveEmailAddress }) 
     q = q.where(summoners.archiveEmailAddress.equals(archiveEmailAddress))
   }
 
-  return query(q.toQuery()).then(rows => {
-    if (rows[0]) {
-      return {
-        ...rows[0],
-        id: parseInt(rows[0].id, 10),
-      };
-    }
-  });
+  return query(q.toQuery()).then(extractSummoner);
 }
 
 export function insertSummoner(summoner) {
-  const [keys, values] = [_.keys(summoner), _.values(summoner)]
+  summoner = { ...summoner };
+
+  if (!summoner.token) {
+    summoner.token = genToken(summoner.id);
+  }
+
+  if (!summoner.archiveEmailAddress) {
+    summoner.archiveEmailAddress = genEmail(summoner.name);
+  }
+
+  if (!summoner.registrationState) {
+    summoner.registrationState = registrationStates.NOT_REGISTERED;
+  }
+
+  const [keys, values] = [_.keys(summoner), _.values(summoner)];
 
   const q = `
     INSERT INTO summoners (${ keys.map(k => `"${k}"`).join(', ') })
@@ -88,7 +109,9 @@ export function updateSummoner(whereClauses, updates) {
     return q.where(summoners[attr].equals(val))
   }, initialQuery);
 
-  return query(q.toQuery());
+  q = q.returning(summoners.star());
+
+  return query(q.toQuery()).then(extractSummoner);
 }
 
 export default summoners;

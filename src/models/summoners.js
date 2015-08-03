@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import riotApi from 'utils/riotApi';
-import { findSummoner, insertSummoner, updateSummoner, genEmail, genToken } from 'db/summoners';
+import { findSummoner, insertSummoner, updateSummoner } from 'db/summoners';
 import { findMatches } from 'db/matches';
 import registrationStates from 'constants/registrationStates';
+import moment from 'moment';
 
 function verifyRunePage(summoner) {
   const { id, region, token } = summoner;
@@ -21,10 +22,8 @@ function summonerFields(region, { id, name, profileIconId }) {
     id,
     region,
     summonerName: name,
-    token: genToken(id),
-    archiveEmailAddress: genEmail(name),
     profileIconUrl: riotApi.imgUrl('profileicon', profileIconId),
-    registrationState: registrationStates.NOT_REGISTERED,
+    lastFetched: new Date().getTime(),
   };
 }
 
@@ -59,7 +58,13 @@ function fetchMatches(summoner) {
 export function fetchSummoner(region, summonerName) {
   return findSummoner({ region, summonerName }).then(summoner => {
     if (summoner) {
-      return summoner;
+      if (!summoner.lastFetched || moment().diff(moment(new Date(summoner.lastFetched)), 'hours') >= 1) {
+        return fetchSummonerFromApi(region, summonerName).then(summoner => {
+          return updateSummoner({ id: summoner.id }, _.omit(summoner, 'id'));
+        });
+      } else {
+        return summoner;
+      }
     } else {
       return fetchSummonerFromApi(region, summonerName).then(insertSummoner);
     }
@@ -78,11 +83,6 @@ export function deregisterSummoner({ id, region }) {
       if (summoner.replayUnsubscribeUrl) {
         return updateSummoner({ id }, {
           registrationState: registrationStates.NOT_REGISTERED
-        }).then(() => {
-          return {
-            ...summoner,
-            registrationState: registrationStates.NOT_REGISTERED
-          };
         });
       } else {
         return summoner;
