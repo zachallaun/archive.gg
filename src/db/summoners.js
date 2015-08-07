@@ -82,7 +82,7 @@ export function insertSummoner(summoner) {
   }
 
   if (!summoner.archiveEmailAddress) {
-    summoner.archiveEmailAddress = genEmail(summoner.name);
+    summoner.archiveEmailAddress = genEmail(summoner.summonerName);
   }
 
   if (!summoner.registrationState) {
