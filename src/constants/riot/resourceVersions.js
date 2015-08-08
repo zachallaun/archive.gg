@@ -1,5 +1,5 @@
 export default {
-  'cdn': '5.2.1', // The ddragon cdn resource version is not prefixed with a `v`
+  'cdn': '5.15.1', // The ddragon cdn resource version is not prefixed with a `v`
   'champion': 'v1.2',
   'current-game': 'v1.0',
   'featured-games': 'v1.0',
