@@ -133,7 +133,7 @@ routes.post('/by-email', (req, res) => {
   findSummoner({ archiveEmailAddress: req.body['recipient'] })
     .then(summoner => {
       if (summoner) {
-        console.log(`Received match for "${summoner.summonerName}". Unsubscribe: ${match.replayUnsubscribeUrl}`);
+        console.log(`Received match for "${summoner.summonerName}". Unsubscribe: ${matchInfo.replayUnsubscribeUrl}`);
         return ensureMatchNotInDB(summoner, matchInfo);
       } else {
         throw `No summoner with archiveEmailAddress '${req.body['recipient']}'`;
