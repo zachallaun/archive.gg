@@ -38,7 +38,7 @@ function apiUrl(region, resourcePath) {
 }
 
 function staticDataApiUrl(region, resourcePath) {
-  const base = `${baseUrl(region)}/static-data/${region}`;
+  const base = `global.api.pvp.net/api/lol/static-data/${region}`;
   const staticDataVersion = resourceVersions['lol-static-data'];
 
   validateRegion(region);
@@ -54,7 +54,7 @@ function get(url, { extract, query = {} } = {}) {
       .query(query)
       .end((err, res) => {
         if (__DEVELOPMENT__) {
-          console.info(`Riot API GET: (${res.status}) ${url}`);
+          console.info(`Riot API GET: (${res.status}) ${url} (query: ${JSON.stringify(query)})`);
         }
 
         if (err) {
