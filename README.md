@@ -1,3 +1,6 @@
+**Note:** I'll be shutting down archive.gg when I get some time.
+Replay.gg now does everything I do and more. Go check it out!
+
 # archive.gg
 
 League of Legends replay archive. Provides folks with a unique email
